@@ -171,6 +171,12 @@
             padding: 5px 10px;
         }
         
+        .edit-btn {
+            background-color: #17a2b8;
+            color: white;
+            padding: 5px 10px;
+        }
+        
         .manage-btn {
             background-color: var(--warning-color);
             color: #333;
@@ -313,7 +319,6 @@
         
         .file-input-container {
             position: relative;
-        
         }
         
         .file-input-label {
@@ -355,6 +360,12 @@
             margin-bottom: 15px;
         }
         
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
         .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
@@ -367,7 +378,7 @@
             gap: 10px;
         }
         
-        /* 换菜模态框样式 */
+        /* 模态框样式 */
         .modal {
             display: none;
             position: fixed;
@@ -386,7 +397,7 @@
             border-radius: var(--border-radius);
             padding: 25px;
             width: 80%;
-            max-width: 600px;
+            max-width: 500px;
             max-height: 80%;
             overflow: auto;
             position: relative;
@@ -447,6 +458,10 @@
             border-bottom: 1px solid #eee;
         }
         
+        .modal-form {
+            padding: 15px 0;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -459,6 +474,10 @@
             
             .replace-grid {
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .actions-container {
+                flex-direction: column;
             }
         }
     </style>
@@ -495,11 +514,11 @@
             <!-- 分类标签 -->
             <div class="category-tabs" id="category-tabs">
                 <div class="category-tab active" data-category="all">全部</div>
-                <div class="category-tab" data-category="meat">荤菜</div>
-                <div class="category-tab" data-category="vegetable">素菜</div>
-                <div class="category-tab" data-category="steam">蒸菜</div>
-                <div class="category-tab" data-category="cold">凉菜</div>
-                <div class="category-tab" data-category="dessert">点心</div>
+                <div class="category-tab" data-category="荤菜">荤菜</div>
+                <div class="category-tab" data-category="素菜">素菜</div>
+                <div class="category-tab" data-category="蒸菜">蒸菜</div>
+                <div class="category-tab" data-category="凉菜">凉菜</div>
+                <div class="category-tab" data-category="汤粥">汤粥</div>
             </div>
             
             <div class="dishes-grid" id="dishes-grid">
@@ -516,11 +535,11 @@
                 </div>
                 <div class="form-group">
                     <select id="new-dish-category">
-                        <option value="meat">荤菜</option>
-                        <option value="vegetable">素菜</option>
-                        <option value="steam">蒸菜</option>
-                        <option value="cold">凉菜</option>
-                        <option value="dessert">点心</option>
+                        <option value="荤菜">荤菜</option>
+                        <option value="素菜">素菜</option>
+                        <option value="蒸菜">蒸菜</option>
+                        <option value="凉菜">凉菜</option>
+                        <option value="汤粥">汤粥</option>
                     </select>
                 </div>
                 <div class="form-actions">
@@ -559,49 +578,39 @@
         </div>
     </div>
     
+    <!-- 编辑菜品模态框 -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-edit-modal">&times;</span>
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-edit"></i> 编辑菜品</h3>
+            </div>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label for="edit-dish-name">菜品名称</label>
+                    <input type="text" id="edit-dish-name" placeholder="输入菜品名称">
+                </div>
+                <div class="form-group">
+                    <label for="edit-dish-category">菜品分类</label>
+                    <select id="edit-dish-category">
+                        <option value="荤菜">荤菜</option>
+                        <option value="素菜">素菜</option>
+                        <option value="蒸菜">蒸菜</option>
+                        <option value="凉菜">凉菜</option>
+                        <option value="汤粥">汤粥</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button id="save-edit" class="btn add-btn">保存</button>
+                    <button id="cancel-edit" class="btn remove-btn">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // 菜品库数据 - 使用name作为唯一标识
-        let dishes = [
-            // 荤菜
-            { name: "宫保鸡丁", category: "meat" },
-            { name: "鱼香肉丝", category: "meat" },
-            { name: "回锅肉", category: "meat" },
-            { name: "东坡肉", category: "meat" },
-            { name: "红烧排骨", category: "meat" },
-            { name: "糖醋里脊", category: "meat" },
-            
-            // 素菜
-            { name: "麻婆豆腐", category: "vegetable" },
-            { name: "蒜蓉西兰花", category: "vegetable" },
-            { name: "干煸煸四季豆", category: "vegetable" },
-            { name: "地三鲜", category: "vegetable" },
-            { name: "清炒时蔬", category: "vegetable" },
-            { name: "香菇青菜", category: "vegetable" },
-            
-            // 蒸菜
-            { name: "清蒸鲈鱼", category: "steam" },
-            { name: "清蒸大闸蟹", category: "steam" },
-            { name: "粉蒸肉", category: "steam" },
-            { name: "梅菜扣肉", category: "steam" },
-            { name: "豉汁蒸排骨", category: "steam" },
-            { name: "蒜蓉粉丝蒸扇贝", category: "steam" },
-            
-            // 凉菜
-            { name: "凉拌黄瓜", category: "cold" },
-            { name: "夫妻肺片", category: "cold" },
-            { name: "凉拌海蜇", category: "cold" },
-            { name: "口水鸡", category: "cold" },
-            { name: "凉拌皮蛋豆腐", category: "cold" },
-            { name: "酱牛肉", category: "cold" },
-            
-            // 点心
-            { name: "糯米鸡", category: "dessert" },
-            { name: "叉烧包", category: "dessert" },
-            { name: "虾饺", category: "dessert" },
-            { name: "流沙包", category: "dessert" },
-            { name: "小笼包", category: "dessert" },
-            { name: "奶黄包", category: "dessert" }
-        ];
+        let dishes = JSON.parse(localStorage.getItem('dishes')) || [];
         
         // 我的菜单
         let myMenu = [];
@@ -628,8 +637,19 @@
         const replaceDishesContainer = document.getElementById('replace-dishes-container');
         const closeModalBtn = document.querySelector('.close-modal');
         
+        // 编辑相关DOM
+        const editModal = document.getElementById('edit-modal');
+        const editDishNameInput = document.getElementById('edit-dish-name');
+        const editDishCategorySelect = document.getElementById('edit-dish-category');
+        const saveEditBtn = document.getElementById('save-edit');
+        const cancelEditBtn = document.getElementById('cancel-edit');
+        const closeEditModalBtn = document.querySelector('.close-edit-modal');
+        
         // 当前替换的菜品信息
         let currentReplacement = null;
+        
+        // 当前编辑的菜品
+        let currentEditDish = null;
         
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -645,6 +665,9 @@
             addDishBtn.addEventListener('click', addNewDish);
             cancelAddBtn.addEventListener('click', hideAddForm);
             closeModalBtn.addEventListener('click', closeReplaceModal);
+            saveEditBtn.addEventListener('click', saveDishEdit);
+            cancelEditBtn.addEventListener('click', closeEditModal);
+            closeEditModalBtn.addEventListener('click', closeEditModal);
             
             // 分类标签事件
             categoryTabs.addEventListener('click', function(e) {
@@ -692,6 +715,9 @@
                     <div class="dish-actions">
                         <button class="btn add-btn" onclick="addToMenu('${dish.name.replace(/'/g, "\\'")}')">
                             <i class="fas fa-plus"></i> 添加
+                        </button>
+                        <button class="btn edit-btn" onclick="openEditModal('${dish.name.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-edit"></i> 编辑
                         </button>
                         <button class="btn remove-btn" onclick="deleteDish('${dish.name.replace(/'/g, "\\'")}')">
                             <i class="fas fa-trash"></i> 删除
@@ -780,6 +806,74 @@
             });
         }
         
+        // 打开编辑模态框
+        function openEditModal(dishName) {
+            const dish = dishes.find(d => d.name === dishName);
+            if (!dish) return;
+            
+            currentEditDish = dish;
+            
+            // 填充表单
+            editDishNameInput.value = dish.name;
+            editDishCategorySelect.value = dish.category;
+            
+            // 显示模态框
+            editModal.style.display = 'flex';
+        }
+        
+        // 保存菜品编辑
+        function saveDishEdit() {
+            if (!currentEditDish) return;
+            
+            const newName = editDishNameInput.value.trim();
+            const newCategory = editDishCategorySelect.value;
+            
+            if (!newName) {
+                showNotification('请输入菜品名称', 'error');
+                return;
+            }
+            
+            // 检查名称是否重复（排除自身）
+            const nameExists = dishes.some(dish => 
+                dish.name === newName && dish !== currentEditDish
+            );
+            
+            if (nameExists) {
+                showNotification('菜品名称已存在', 'error');
+                return;
+            }
+            
+            // 获取旧名称
+            const oldName = currentEditDish.name;
+            
+            // 更新菜品库中的菜品
+            currentEditDish.name = newName;
+            currentEditDish.category = newCategory;
+            
+            // 更新菜单中的菜品
+            myMenu.forEach(item => {
+                if (item.name === oldName) {
+                    item.name = newName;
+                    item.category = newCategory;
+                }
+            });
+            
+            // 重新渲染
+            renderDishesByCategory(currentCategory);
+            renderMenu();
+            
+            // 关闭模态框
+            closeEditModal();
+            localStorage.setItem('dishes', JSON.stringify(dishes));
+            showNotification(`菜品 "${oldName}" 已更新为 "${newName}"`, 'success');
+        }
+        
+        // 关闭编辑模态框
+        function closeEditModal() {
+            editModal.style.display = 'none';
+            currentEditDish = null;
+        }
+        
         // 打开换菜模态框
         function openReplaceModal(dishName, menuIndex) {
             const dish = dishes.find(d => d.name === dishName);
@@ -856,11 +950,11 @@
         // 获取分类中文名称
         function getCategoryName(category) {
             const names = {
-                'meat': '荤菜',
-                'vegetable': '素菜',
-                'steam': '蒸菜',
-                'cold': '凉菜',
-                'dessert': '点心'
+                '荤菜': '荤菜',
+                '素菜': '素菜',
+                '蒸菜': '蒸菜',
+                '凉菜': '凉菜',
+                '汤粥': '汤粥'
             };
             return names[category] || category;
         }
@@ -897,7 +991,8 @@
                 return;
             }
             
-            let menuText = "我的菜单：\n\n";
+     
+            let menuText = "周 菜单\n\n";
             myMenu.forEach((dish, index) => {
                 menuText += `${index + 1}. ${dish.name}\n`;
             });
@@ -956,25 +1051,34 @@
                     }
                     
                     // 检查名称唯一性
-                    const allNames = [...dishes.map(d => d.name), ...importedDishes.map(d => d.name)];
+                    const allNames = importedDishes.map(d => d.name);
                     const uniqueNames = [...new Set(allNames)];
                     
                     if (allNames.length !== uniqueNames.length) {
                         throw new Error('导入的菜品中有重复名称');
                     }
                     
-                    // 更新菜品库
+                    // 确认覆盖
+                    if (!confirm('导入将覆盖当前菜品库和菜单，确定要继续吗？')) {
+                        return;
+                    }
+                    
+                    // 覆盖菜品库并清空菜单
                     dishes = importedDishes;
+                    myMenu = [];
                     
                     // 重新渲染
                     renderDishesByCategory(currentCategory);
-                    filterDishes();
-                    
-                    showNotification('菜品库导入成功', 'success');
+                    renderMenu();
+                    localStorage.setItem('dishes', JSON.stringify(dishes));
+                    showNotification('菜品库导入成功，已覆盖本地数据', 'success');
                 } catch (error) {
                     console.error('导入失败:', error);
                     showNotification('导入失败: ' + error.message, 'error');
                 }
+                
+                // 重置文件输入，允许再次选择相同文件
+                event.target.value = '';
             };
             
             reader.onerror = function() {
@@ -988,7 +1092,7 @@
         function showAddForm() {
             addDishForm.style.display = 'block';
             newDishNameInput.value = '';
-            newDishCategorySelect.value = 'meat'; // 默认选择荤菜
+            newDishCategorySelect.value = '荤菜'; // 默认选择荤菜
             newDishNameInput.focus();
         }
         
@@ -1022,7 +1126,7 @@
             dishes.push(newDish);
             renderDishesByCategory(currentCategory);
             hideAddForm();
-            
+            localStorage.setItem('dishes', JSON.stringify(dishes));
             showNotification(`"${dishName}" 已添加到菜品库`, 'success');
         }
         
@@ -1055,7 +1159,7 @@
             // 重新渲染
             renderMenu();
             renderDishesByCategory(currentCategory);
-            
+            localStorage.setItem('dishes', JSON.stringify(dishes));
             showNotification(`"${dishName}" 已从菜品库中删除`, 'success');
         }
         
