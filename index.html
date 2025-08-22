@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菜单管理系统</title>
+    <title>餐饮管理系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -15,9 +15,10 @@
             --success-color: #28a745;
             --danger-color: #dc3545;
             --warning-color: #ffc107;
-            --border-radius: 8px;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --gap: 20px;
+            --info-color: #17a2b8;
+            --border-radius: 12px;
+            --shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
         }
         
         * {
@@ -28,263 +29,286 @@
         }
         
         body {
-            background-color: #f0f2f5;
+            background: linear-gradient(135deg, #f5f7fa, #e4edf9);
             color: var(--dark-color);
             line-height: 1.6;
+            min-height: 100vh;
             padding: 20px;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: var(--gap);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
         
         header {
-            grid-column: 1 / -1;
             text-align: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
+            padding: 30px 0;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
         }
         
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         header p {
             font-size: 1.2rem;
             opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
         }
         
-        .panel {
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            padding: 25px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
-        }
-        
-        .panel h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--light-color);
-            display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        
-        .menu-list {
-            flex-grow: 1;
-            border: 1px solid #eee;
-            border-radius: var(--border-radius);
-            min-height: 300px;
-            padding: 15px;
-            margin-bottom: 20px;
-            overflow-y: auto;
-            max-height: 400px;
-        }
-        
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        
-        .menu-item:hover {
-            background-color: #f9f9f9;
-        }
-        
-        .menu-item .number {
-            display: inline-block;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
             text-align: center;
-            line-height: 25px;
-            margin-right: 10px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         
-        .menu-item:last-child {
-            border-bottom: none;
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
         }
         
-        .menu-item .actions {
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-color);
+        }
+        
+        .card.customer::before {
+            background: var(--success-color);
+        }
+        
+        .card.staff-menu::before {
+            background: var(--info-color);
+        }
+        
+        .card.staff-usage::before {
+            background: var(--warning-color);
+        }
+        
+        .card.menu::before {
+            background: var(--accent-color);
+        }
+        
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(74, 111, 165, 0.1);
+            border-radius: 50%;
             display: flex;
-            gap: 5px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+        
+        .card.customer .card-icon {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+        
+        .card.staff-menu .card-icon {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+        
+        .card.staff-usage .card-icon {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .card.menu .card-icon {
+            background: rgba(255, 126, 95, 0.1);
+            color: var(--accent-color);
+        }
+        
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
         
         .btn {
-            padding: 8px 12px;
-            border-radius: var(--border-radius);
+            padding: 12px 25px;
+            border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: var(--transition);
             border: none;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-block {
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .copy-btn {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .copy-btn:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        .remove-btn {
-            background-color: var(--danger-color);
-            color: white;
-            padding: 5px 10px;
-        }
-        
-        .add-btn {
-            background-color: var(--success-color);
-            color: white;
-            padding: 5px 10px;
-        }
-        
-        .replace-btn {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 5px 10px;
-        }
-        
-        .edit-btn {
-            background-color: #17a2b8;
-            color: white;
-            padding: 5px 10px;
-        }
-        
-        .manage-btn {
-            background-color: var(--warning-color);
-            color: #333;
-        }
-        
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .search-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
-        .search-container input {
-            width: 100%;
-            padding: 12px 15px 12px 45px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-        }
-        
-        .search-container i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-        }
-        
-        .dishes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 10px;
-            border: 1px solid #eee;
-            border-radius: var(--border-radius);
-        }
-        
-        .dish-card {
-            background: white;
-            border: 1px solid #eee;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .dish-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-color: var(--primary-color);
-        }
-        
-        .dish-name {
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .dish-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-        }
-        
-        .delete-dish {
-            background-color: var(--danger-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: var(--border-radius);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .category-tabs {
-            display: flex;
             gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
+            font-size: 1rem;
+            text-decoration: none;
         }
         
-        .category-tab {
-            padding: 8px 15px;
-            border-radius: 20px;
-            background: #e9ecef;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-        
-        .category-tab.active {
+        .btn-primary {
             background: var(--primary-color);
             color: white;
         }
         
-        .actions-container {
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        .calculator-section {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+        
+        .section-header {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
             gap: 10px;
-            margin-top: 20px;
+        }
+        
+        .calculator {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .calculator {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .calculator-display {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            font-size: 2rem;
+            text-align: right;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow: hidden;
+            font-family: monospace;
+            border: 1px solid #eee;
+        }
+        
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        .calc-btn {
+            padding: 15px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            background: #f1f3f4;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .calc-btn:hover {
+            background: #e4e6e8;
+        }
+        
+        .calc-btn.operator {
+            background: #f9ab8a;
+            color: #333;
+        }
+        
+        .calc-btn.operator:hover {
+            background: #ff7e5f;
+            color: white;
+        }
+        
+        .calc-btn.equals {
+            background: var(--primary-color);
+            color: white;
+            grid-column: span 2;
+        }
+        
+        .calc-btn.equals:hover {
+            background: var(--secondary-color);
+        }
+        
+        .calc-btn.clear {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .calc-btn.clear:hover {
+            background: #c82333;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 30px;
         }
         
         .notification {
@@ -309,174 +333,55 @@
             background-color: var(--success-color);
         }
         
-        .notification.error {
-            background-color: var(--danger-color);
-        }
-        
         .notification.info {
-            background-color: var(--primary-color);
+            background-color: var(--info-color);
         }
         
-        .file-input-container {
-            position: relative;
-        }
-        
-        .file-input-label {
-            display: block;
-            padding: 12px;
-            background-color: var(--light-color);
-            border: 2px dashed #ccc;
-            border-radius: var(--border-radius);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .file-input-label:hover {
-            background-color: #e9ecef;
-            border-color: var(--primary-color);
-        }
-        
-        #file-input {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-        
-        .add-dish-form {
-            margin-top: 15px;
-            padding: 15px;
-            background: var(--light-color);
-            border-radius: var(--border-radius);
-            display: none;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-        }
-        
-        .form-actions {
+        .system-controls {
             display: flex;
-            gap: 10px;
-        }
-        
-        /* 模态框样式 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 2000;
-            align-items: center;
             justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            width: 80%;
-            max-width: 500px;
-            max-height: 80%;
-            overflow: auto;
-            position: relative;
-        }
-        
-        .modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #aaa;
-        }
-        
-        .close-modal:hover {
-            color: var(--dark-color);
-        }
-        
-        .replace-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 20px;
         }
         
-        .replace-dish {
-            background-color: #f8f9fa;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            text-align: center;
+        .control-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #eee;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .replace-dish:hover {
-            background-color: var(--primary-color);
+        .add-btn {
+            background-color: var(--success-color);
             color: white;
+        }
+        
+        .edit-btn {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .control-btn:hover {
+            opacity: 0.9;
             transform: translateY(-3px);
         }
         
-        .replace-category {
-            margin-top: 20px;
-            font-weight: 600;
-            color: var(--primary-color);
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .modal-form {
-            padding: 15px 0;
-        }
-        
         @media (max-width: 768px) {
-            .container {
+            .dashboard {
                 grid-template-columns: 1fr;
             }
             
-            .modal-content {
-                width: 90%;
-                padding: 15px;
-            }
-            
-            .replace-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
-            
-            .actions-container {
+            .system-controls {
                 flex-direction: column;
             }
         }
@@ -485,694 +390,173 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-utensils"></i> 菜单管理系统</h1>
-            <p>轻松创建、管理和分享您的菜单 - 使用名称标识菜品</p>
+            <h1><i class="fas fa-utensils"></i> 餐饮管理系统</h1>
+            <p>高效管理客户餐、员工餐菜单与用量，内置实用计算器</p>
         </header>
         
-        <!-- 左侧菜单区域 -->
-        <div class="panel">
-            <h2><i class="fas fa-clipboard-list"></i> 我的菜单</h2>
-            <div class="menu-list" id="menu-list">
-                <div class="placeholder">
-                    <i class="fas fa-inbox" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
-                    <p>从右侧菜品库添加菜品到菜单</p>
+        <div class="dashboard">
+            <div class="card customer">
+                <div class="card-icon">
+                    <i class="fas fa-user-tie"></i>
                 </div>
+                <h2>客户餐</h2>
+                <p>管理客户餐菜单、配料需求及特殊要求，提供专业餐饮服务</p>
+                <a href="customer_meals.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i> 进入客户餐管理
+                </a>
             </div>
-            <button id="copy-menu" class="btn copy-btn btn-block">
-                <i class="fas fa-copy"></i> 复制菜单到剪贴板
-            </button>
+            
+            <div class="card staff-menu">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h2>员工餐菜单</h2>
+                <p>创建和管理员工每日菜单，确保员工膳食营养均衡</p>
+                <a href="staff_menu.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i> 进入员工餐菜单
+                </a>
+            </div>
+            
+            <div class="card staff-usage">
+                <div class="card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h2>员工餐用量</h2>
+                <p>跟踪食材使用情况，优化采购计划，减少浪费</p>
+                <a href="staff_usage.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i> 查看用量统计
+                </a>
+            </div>
+            
+            <div class="card menu">
+                <div class="card-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h2>菜单管理</h2>
+                <p>管理所有菜品信息，包括配料、做法和营养信息</p>
+                <a href="menu_management.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i> 管理菜单
+                </a>
+            </div>
         </div>
+       
         
-        <!-- 右侧菜品库区域 -->
-        <div class="panel">
-            <h2><i class="fas fa-book"></i> 菜品库</h2>
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" id="dish-search" placeholder="搜索菜品...">
+        <div class="calculator-section">
+            <div class="section-header">
+                <h2><i class="fas fa-calculator"></i> 实用计算器</h2>
             </div>
             
-            <!-- 分类标签 -->
-            <div class="category-tabs" id="category-tabs">
-                <div class="category-tab active" data-category="all">全部</div>
-                <div class="category-tab" data-category="荤菜">荤菜</div>
-                <div class="category-tab" data-category="素菜">素菜</div>
-                <div class="category-tab" data-category="蒸菜">蒸菜</div>
-                <div class="category-tab" data-category="凉菜">凉菜</div>
-                <div class="category-tab" data-category="汤粥">汤粥</div>
-            </div>
-            
-            <div class="dishes-grid" id="dishes-grid">
-                <!-- 菜品卡片将通过JS动态生成 -->
-            </div>
-            
-            <button id="show-add-form" class="btn manage-btn">
-                <i class="fas fa-plus"></i> 添加新菜品
-            </button>
-            
-            <div class="add-dish-form" id="add-dish-form">
-                <div class="form-group">
-                    <input type="text" id="new-dish-name" placeholder="输入菜品名称">
+            <div class="calculator">
+                <div class="calculator-display" id="display">0</div>
+                
+                <div class="calculator-buttons">
+                    <button class="calc-btn clear" onclick="clearDisplay()">C</button>
+                    <button class="calc-btn" onclick="appendToDisplay('(')">(</button>
+                    <button class="calc-btn" onclick="appendToDisplay(')')">)</button>
+                    <button class="calc-btn operator" onclick="appendToDisplay('/')">/</button>
+                    
+                    <button class="calc-btn" onclick="appendToDisplay('7')">7</button>
+                    <button class="calc-btn" onclick="appendToDisplay('8')">8</button>
+                    <button class="calc-btn" onclick="appendToDisplay('9')">9</button>
+                    <button class="calc-btn operator" onclick="appendToDisplay('*')">×</button>
+                    
+                    <button class="calc-btn" onclick="appendToDisplay('4')">4</button>
+                    <button class="calc-btn" onclick="appendToDisplay('5')">5</button>
+                    <button class="calc-btn" onclick="appendToDisplay('6')">6</button>
+                    <button class="calc-btn operator" onclick="appendToDisplay('-')">-</button>
+                    
+                    <button class="calc-btn" onclick="appendToDisplay('1')">1</button>
+                    <button class="calc-btn" onclick="appendToDisplay('2')">2</button>
+                    <button class="calc-btn" onclick="appendToDisplay('3')">3</button>
+                    <button class="calc-btn operator" onclick="appendToDisplay('+')">+</button>
+                    
+                    <button class="calc-btn" onclick="appendToDisplay('0')">0</button>
+                    <button class="calc-btn" onclick="appendToDisplay('.')">.</button>
+                    <button class="calc-btn" onclick="backspace()">⌫</button>
+                    <button class="calc-btn equals" onclick="calculate()">=</button>
                 </div>
-                <div class="form-group">
-                    <select id="new-dish-category">
-                        <option value="荤菜">荤菜</option>
-                        <option value="素菜">素菜</option>
-                        <option value="蒸菜">蒸菜</option>
-                        <option value="凉菜">凉菜</option>
-                        <option value="汤粥">汤粥</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button id="add-dish" class="btn add-btn">添加菜品</button>
-                    <button id="cancel-add" class="btn remove-btn">取消</button>
-                </div>
-            </div>
-            
-            <div class="actions-container">
-                <div class="file-input-container">
-                    <label for="file-input" class="btn manage-btn" style="width: 100%;">
-                        <i class="fas fa-file-import"></i> 导入菜品库
-                    </label>
-                    <input type="file" id="file-input" accept=".json">
-                </div>
-                <button id="export-dishes" class="btn manage-btn">
-                    <i class="fas fa-file-export"></i> 导出菜品库
-                </button>
             </div>
         </div>
     </div>
     
-    <!-- 通知区域 -->
+    <footer>
+        <p>© 2023 餐饮管理系统 | 高效管理您的餐饮业务</p>
+    </footer>
+    
     <div id="notification" class="notification"></div>
     
-    <!-- 换菜模态框 -->
-    <div id="replace-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-exchange-alt"></i> 选择替换菜品</h3>
-            </div>
-            <div id="replace-dishes-container">
-                <!-- 替换菜品将通过JS动态生成 -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- 编辑菜品模态框 -->
-    <div id="edit-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-edit-modal">&times;</span>
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-edit"></i> 编辑菜品</h3>
-            </div>
-            <div class="modal-form">
-                <div class="form-group">
-                    <label for="edit-dish-name">菜品名称</label>
-                    <input type="text" id="edit-dish-name" placeholder="输入菜品名称">
-                </div>
-                <div class="form-group">
-                    <label for="edit-dish-category">菜品分类</label>
-                    <select id="edit-dish-category">
-                        <option value="荤菜">荤菜</option>
-                        <option value="素菜">素菜</option>
-                        <option value="蒸菜">蒸菜</option>
-                        <option value="凉菜">凉菜</option>
-                        <option value="汤粥">汤粥</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button id="save-edit" class="btn add-btn">保存</button>
-                    <button id="cancel-edit" class="btn remove-btn">取消</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
     <script>
-        // 菜品库数据 - 使用name作为唯一标识
-        let dishes = JSON.parse(localStorage.getItem('dishes')) || [];
+        // 计算器功能
+        let display = document.getElementById('display');
+        let currentInput = '0';
+        let shouldResetDisplay = false;
         
-        // 我的菜单
-        let myMenu = [];
-        let currentCategory = "all";
-        
-        // DOM元素
-        const menuList = document.getElementById('menu-list');
-        const dishesGrid = document.getElementById('dishes-grid');
-        const dishSearch = document.getElementById('dish-search');
-        const copyMenuBtn = document.getElementById('copy-menu');
-        const exportDishesBtn = document.getElementById('export-dishes');
-        const fileInput = document.getElementById('file-input');
-        const notification = document.getElementById('notification');
-        const showAddFormBtn = document.getElementById('show-add-form');
-        const addDishForm = document.getElementById('add-dish-form');
-        const addDishBtn = document.getElementById('add-dish');
-        const cancelAddBtn = document.getElementById('cancel-add');
-        const categoryTabs = document.getElementById('category-tabs');
-        const newDishCategorySelect = document.getElementById('new-dish-category');
-        const newDishNameInput = document.getElementById('new-dish-name');
-        
-        // 换菜相关DOM
-        const replaceModal = document.getElementById('replace-modal');
-        const replaceDishesContainer = document.getElementById('replace-dishes-container');
-        const closeModalBtn = document.querySelector('.close-modal');
-        
-        // 编辑相关DOM
-        const editModal = document.getElementById('edit-modal');
-        const editDishNameInput = document.getElementById('edit-dish-name');
-        const editDishCategorySelect = document.getElementById('edit-dish-category');
-        const saveEditBtn = document.getElementById('save-edit');
-        const cancelEditBtn = document.getElementById('cancel-edit');
-        const closeEditModalBtn = document.querySelector('.close-edit-modal');
-        
-        // 当前替换的菜品信息
-        let currentReplacement = null;
-        
-        // 当前编辑的菜品
-        let currentEditDish = null;
-        
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 渲染菜品库
-            renderDishesByCategory(currentCategory);
-            
-            // 设置事件监听器
-            dishSearch.addEventListener('input', filterDishes);
-            copyMenuBtn.addEventListener('click', copyMenuToClipboard);
-            exportDishesBtn.addEventListener('click', exportDishes);
-            fileInput.addEventListener('change', handleFileImport);
-            showAddFormBtn.addEventListener('click', showAddForm);
-            addDishBtn.addEventListener('click', addNewDish);
-            cancelAddBtn.addEventListener('click', hideAddForm);
-            closeModalBtn.addEventListener('click', closeReplaceModal);
-            saveEditBtn.addEventListener('click', saveDishEdit);
-            cancelEditBtn.addEventListener('click', closeEditModal);
-            closeEditModalBtn.addEventListener('click', closeEditModal);
-            
-            // 分类标签事件
-            categoryTabs.addEventListener('click', function(e) {
-                if (e.target.classList.contains('category-tab')) {
-                    // 更新标签状态
-                    document.querySelectorAll('.category-tab').forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    e.target.classList.add('active');
-                    
-                    // 更新当前分类
-                    currentCategory = e.target.dataset.category;
-                    
-                    // 渲染对应分类的菜品
-                    renderDishesByCategory(currentCategory);
-                }
-            });
-        });
-        
-        // 按分类渲染菜品库
-        function renderDishesByCategory(category) {
-            let dishesToRender = dishes;
-            
-            if (category !== "all") {
-                dishesToRender = dishes.filter(dish => dish.category === category);
+        function appendToDisplay(value) {
+            if (shouldResetDisplay) {
+                currentInput = '0';
+                shouldResetDisplay = false;
             }
             
-            renderDishes(dishesToRender);
-        }
-        
-        // 渲染菜品库
-        function renderDishes(dishesArray) {
-            dishesGrid.innerHTML = '';
-            
-            if (dishesArray.length === 0) {
-                dishesGrid.innerHTML = '<div class="no-results">没有找到菜品</div>';
-                return;
+            if (currentInput === '0' && value !== '.') {
+                currentInput = value;
+            } else {
+                currentInput += value;
             }
             
-            dishesArray.forEach(dish => {
-                const dishCard = document.createElement('div');
-                dishCard.className = 'dish-card';
-                dishCard.innerHTML = `
-                    <div class="dish-name">${dish.name}</div>
-                    <div class="dish-actions">
-                        <button class="btn add-btn" onclick="addToMenu('${dish.name.replace(/'/g, "\\'")}')">
-                            <i class="fas fa-plus"></i> 添加
-                        </button>
-                        <button class="btn edit-btn" onclick="openEditModal('${dish.name.replace(/'/g, "\\'")}')">
-                            <i class="fas fa-edit"></i> 编辑
-                        </button>
-                        <button class="btn remove-btn" onclick="deleteDish('${dish.name.replace(/'/g, "\\'")}')">
-                            <i class="fas fa-trash"></i> 删除
-                        </button>
-                    </div>
-                `;
-                dishesGrid.appendChild(dishCard);
-            });
+            display.textContent = currentInput;
         }
         
-        // 过滤菜品
-        function filterDishes() {
-            const searchTerm = dishSearch.value.toLowerCase();
-            let filteredDishes = dishes;
-            
-            if (currentCategory !== "all") {
-                filteredDishes = dishes.filter(dish => dish.category === currentCategory);
+        function clearDisplay() {
+            currentInput = '0';
+            display.textContent = currentInput;
+            showNotification('计算器已重置', 'info');
+        }
+        
+        function backspace() {
+            if (currentInput.length === 1) {
+                currentInput = '0';
+            } else {
+                currentInput = currentInput.slice(0, -1);
             }
-            
-            if (searchTerm !== '') {
-                filteredDishes = filteredDishes.filter(dish => 
-                    dish.name.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            renderDishes(filteredDishes);
+            display.textContent = currentInput;
         }
         
-        // 添加到菜单
-        function addToMenu(dishName) {
-            const dish = dishes.find(d => d.name === dishName);
-            if (!dish) return;
-            
-            // 检查是否已在菜单中
-            if (myMenu.some(item => item.name === dishName)) {
-                showNotification(`"${dish.name}" 已在菜单中`, 'error');
-                return;
-            }
-            
-            myMenu.push({...dish});
-            renderMenu();
-            showNotification(`"${dish.name}" 已添加到菜单`, 'success');
-        }
-        
-        // 从菜单中移除
-        function removeFromMenu(dishName) {
-            const dishIndex = myMenu.findIndex(d => d.name === dishName);
-            if (dishIndex === -1) return;
-            
-            const dishNameToRemove = myMenu[dishIndex].name;
-            myMenu.splice(dishIndex, 1);
-            renderMenu();
-            showNotification(`"${dishNameToRemove}" 已从菜单中移除`, 'success');
-        }
-        
-        // 渲染菜单
-        function renderMenu() {
-            if (myMenu.length === 0) {
-                menuList.innerHTML = `
-                    <div class="placeholder" style="text-align: center; padding: 40px 0;">
-                        <i class="fas fa-inbox" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
-                        <p>从右侧菜品库添加菜品到菜单</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            menuList.innerHTML = '';
-            myMenu.forEach((dish, index) => {
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item';
-                menuItem.innerHTML = `
-                    <div>
-                        <span class="number">${index + 1}</span>${dish.name}
-                    </div>
-                    <div class="actions">
-                        <button class="btn replace-btn" onclick="openReplaceModal('${dish.name.replace(/'/g, "\\'")}', ${index})">
-                            <i class="fas fa-exchange-alt"></i> 换菜
-                        </button>
-                        <button class="btn remove-btn" onclick="removeFromMenu('${dish.name.replace(/'/g, "\\'")}')">
-                            <i class="fas fa-times"></i> 移除
-                        </button>
-                    </div>
-                `;
-                menuList.appendChild(menuItem);
-            });
-        }
-        
-        // 打开编辑模态框
-        function openEditModal(dishName) {
-            const dish = dishes.find(d => d.name === dishName);
-            if (!dish) return;
-            
-            currentEditDish = dish;
-            
-            // 填充表单
-            editDishNameInput.value = dish.name;
-            editDishCategorySelect.value = dish.category;
-            
-            // 显示模态框
-            editModal.style.display = 'flex';
-        }
-        
-        // 保存菜品编辑
-        function saveDishEdit() {
-            if (!currentEditDish) return;
-            
-            const newName = editDishNameInput.value.trim();
-            const newCategory = editDishCategorySelect.value;
-            
-            if (!newName) {
-                showNotification('请输入菜品名称', 'error');
-                return;
-            }
-            
-            // 检查名称是否重复（排除自身）
-            const nameExists = dishes.some(dish => 
-                dish.name === newName && dish !== currentEditDish
-            );
-            
-            if (nameExists) {
-                showNotification('菜品名称已存在', 'error');
-                return;
-            }
-            
-            // 获取旧名称
-            const oldName = currentEditDish.name;
-            
-            // 更新菜品库中的菜品
-            currentEditDish.name = newName;
-            currentEditDish.category = newCategory;
-            
-            // 更新菜单中的菜品
-            myMenu.forEach(item => {
-                if (item.name === oldName) {
-                    item.name = newName;
-                    item.category = newCategory;
-                }
-            });
-            
-            // 重新渲染
-            renderDishesByCategory(currentCategory);
-            renderMenu();
-            
-            // 关闭模态框
-            closeEditModal();
-            localStorage.setItem('dishes', JSON.stringify(dishes));
-            showNotification(`菜品 "${oldName}" 已更新为 "${newName}"`, 'success');
-        }
-        
-        // 关闭编辑模态框
-        function closeEditModal() {
-            editModal.style.display = 'none';
-            currentEditDish = null;
-        }
-        
-        // 打开换菜模态框
-        function openReplaceModal(dishName, menuIndex) {
-            const dish = dishes.find(d => d.name === dishName);
-            if (!dish) return;
-            
-            // 存储当前替换信息
-            currentReplacement = {
-                dishName: dishName,
-                menuIndex: menuIndex,
-                category: dish.category
-            };
-            
-            // 显示模态框
-            replaceModal.style.display = 'flex';
-            
-            // 渲染替换菜品
-            renderReplaceDishes(dish.category, dishName);
-        }
-        
-        // 渲染替换菜品
-        function renderReplaceDishes(category, excludeName) {
-            replaceDishesContainer.innerHTML = '';
-            
-            // 获取相同分类的菜品（排除当前菜品）
-            const sameCategoryDishes = dishes.filter(d => 
-                d.category === category && d.name !== excludeName
-            );
-            
-            // 按类别分组
-            const dishesByCategory = {};
-            dishes.forEach(dish => {
-                if (dish.name === excludeName) return;
-                if (!dishesByCategory[dish.category]) {
-                    dishesByCategory[dish.category] = [];
-                }
-                dishesByCategory[dish.category].push(dish);
-            });
-            
-            // 优先显示相同分类
-            if (sameCategoryDishes.length > 0) {
-                const sameCategorySection = document.createElement('div');
-                sameCategorySection.innerHTML = `
-                    <div class="replace-category">${getCategoryName(category)}（同类推荐）</div>
-                    <div class="replace-grid">
-                        ${sameCategoryDishes.map(dish => `
-                            <div class="replace-dish" onclick="selectReplacement('${dish.name.replace(/'/g, "\\'")}')">
-                                ${dish.name}
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                replaceDishesContainer.appendChild(sameCategorySection);
-            }
-            
-            // 添加其他分类的菜品
-            for (const cat in dishesByCategory) {
-                if (cat === category) continue; // 跳过当前分类
+        function calculate() {
+            try {
+                // 替换×为*，÷为/以便eval计算
+                let expression = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
+                let result = eval(expression);
                 
-                const categorySection = document.createElement('div');
-                categorySection.innerHTML = `
-                    <div class="replace-category">${getCategoryName(cat)}</div>
-                    <div class="replace-grid">
-                        ${dishesByCategory[cat].map(dish => `
-                            <div class="replace-dish" onclick="selectReplacement('${dish.name.replace(/'/g, "\\'")}')">
-                                ${dish.name}
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                replaceDishesContainer.appendChild(categorySection);
-            }
-        }
-        
-        // 获取分类中文名称
-        function getCategoryName(category) {
-            const names = {
-                '荤菜': '荤菜',
-                '素菜': '素菜',
-                '蒸菜': '蒸菜',
-                '凉菜': '凉菜',
-                '汤粥': '汤粥'
-            };
-            return names[category] || category;
-        }
-        
-        // 选择替换菜品
-        function selectReplacement(newDishName) {
-            if (!currentReplacement) return;
-            
-            const newDish = dishes.find(d => d.name === newDishName);
-            if (!newDish) return;
-            
-            // 替换菜单中的菜品
-            myMenu[currentReplacement.menuIndex] = {...newDish};
-            
-            // 重新渲染菜单
-            renderMenu();
-            
-            // 关闭模态框
-            closeReplaceModal();
-            
-            showNotification(`已将 "${currentReplacement.dishName}" 替换为 "${newDish.name}"`, 'success');
-        }
-        
-        // 关闭换菜模态框
-        function closeReplaceModal() {
-            replaceModal.style.display = 'none';
-            currentReplacement = null;
-        }
-        
-        // 复制菜单到剪贴板
-        function copyMenuToClipboard() {
-            if (myMenu.length === 0) {
-                showNotification('菜单为空，无法复制', 'error');
-                return;
-            }
-            
-     
-            let menuText = "周 菜单\n\n";
-            myMenu.forEach((dish, index) => {
-                menuText += `${index + 1}. ${dish.name}\n`;
-            });
-            
-            navigator.clipboard.writeText(menuText)
-                .then(() => {
-                    showNotification('菜单已复制到剪贴板', 'success');
-                })
-                .catch(err => {
-                    console.error('复制失败:', err);
-                    showNotification('复制失败，请重试', 'error');
-                });
-        }
-        
-        // 导出菜品库
-        function exportDishes() {
-            if (dishes.length === 0) {
-                showNotification('菜品库为空，无法导出', 'warning');
-                return;
-            }
-            
-            // 创建JSON数据
-            const dataStr = JSON.stringify(dishes, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            // 创建下载链接
-            const exportFileDefaultName = '菜品库_' + new Date().toISOString().slice(0, 10) + '.json';
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showNotification('菜品库导出成功', 'success');
-        }
-        
-        // 处理文件导入
-        function handleFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                try {
-                    const content = e.target.result;
-                    const importedDishes = JSON.parse(content);
-                    
-                    // 验证导入的数据结构
-                    if (!Array.isArray(importedDishes) || 
-                        !importedDishes.every(dish => 
-                            dish.name && dish.category
-                        )
-                    ) {
-                        throw new Error('导入的文件格式不正确');
-                    }
-                    
-                    // 检查名称唯一性
-                    const allNames = importedDishes.map(d => d.name);
-                    const uniqueNames = [...new Set(allNames)];
-                    
-                    if (allNames.length !== uniqueNames.length) {
-                        throw new Error('导入的菜品中有重复名称');
-                    }
-                    
-                    // 确认覆盖
-                    if (!confirm('导入将覆盖当前菜品库和菜单，确定要继续吗？')) {
-                        return;
-                    }
-                    
-                    // 覆盖菜品库并清空菜单
-                    dishes = importedDishes;
-                    myMenu = [];
-                    
-                    // 重新渲染
-                    renderDishesByCategory(currentCategory);
-                    renderMenu();
-                    localStorage.setItem('dishes', JSON.stringify(dishes));
-                    showNotification('菜品库导入成功，已覆盖本地数据', 'success');
-                } catch (error) {
-                    console.error('导入失败:', error);
-                    showNotification('导入失败: ' + error.message, 'error');
+                // 处理浮点数精度问题
+                if (Number.isInteger(result)) {
+                    currentInput = result.toString();
+                } else {
+                    currentInput = parseFloat(result.toFixed(4)).toString();
                 }
                 
-                // 重置文件输入，允许再次选择相同文件
-                event.target.value = '';
-            };
-            
-            reader.onerror = function() {
-                showNotification('读取文件失败', 'error');
-            };
-            
-            reader.readAsText(file);
-        }
-        
-        // 显示添加菜品表单
-        function showAddForm() {
-            addDishForm.style.display = 'block';
-            newDishNameInput.value = '';
-            newDishCategorySelect.value = '荤菜'; // 默认选择荤菜
-            newDishNameInput.focus();
-        }
-        
-        // 隐藏添加菜品表单
-        function hideAddForm() {
-            addDishForm.style.display = 'none';
-        }
-        
-        // 添加新菜品
-        function addNewDish() {
-            const dishName = newDishNameInput.value.trim();
-            const category = newDishCategorySelect.value;
-            
-            if (!dishName) {
-                showNotification('请输入菜品名称', 'error');
-                return;
+                display.textContent = currentInput;
+                shouldResetDisplay = true;
+            } catch (error) {
+                display.textContent = '错误';
+                showNotification('计算错误，请检查表达式', 'info');
+                setTimeout(() => {
+                    clearDisplay();
+                }, 1500);
             }
-            
-            // 检查是否已存在同名菜品
-            if (dishes.some(dish => dish.name.toLowerCase() === dishName.toLowerCase())) {
-                showNotification('菜品名称已存在', 'error');
-                return;
-            }
-            
-            // 创建新菜品
-            const newDish = {
-                name: dishName,
-                category: category
-            };
-            
-            dishes.push(newDish);
-            renderDishesByCategory(currentCategory);
-            hideAddForm();
-            localStorage.setItem('dishes', JSON.stringify(dishes));
-            showNotification(`"${dishName}" 已添加到菜品库`, 'success');
-        }
-        
-        // 删除菜品
-        function deleteDish(dishName) {
-            // 查找菜品
-            const dishIndex = dishes.findIndex(d => d.name === dishName);
-            
-            if (dishIndex === -1) return;
-            
-            if (!confirm(`确定要删除菜品 "${dishName}" 吗？`)) {
-                return;
-            }
-            
-            // 从菜品库中移除
-            dishes.splice(dishIndex, 1);
-            
-            // 从菜单中移除所有同名菜品
-            const menuIndices = [];
-            myMenu.forEach((item, index) => {
-                if (item.name === dishName) {
-                    menuIndices.push(index);
-                }
-            });
-            // 从后往前删除，避免索引变化
-            menuIndices.reverse().forEach(index => {
-                myMenu.splice(index, 1);
-            });
-            
-            // 重新渲染
-            renderMenu();
-            renderDishesByCategory(currentCategory);
-            localStorage.setItem('dishes', JSON.stringify(dishes));
-            showNotification(`"${dishName}" 已从菜品库中删除`, 'success');
         }
         
         // 显示通知
         function showNotification(message, type) {
+            const notification = document.getElementById('notification');
             notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
+            notification.className = `notification ${type} show`;
             
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
+        
+      
     </script>
 </body>
 </html>
