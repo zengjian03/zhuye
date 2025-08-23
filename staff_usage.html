@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菜单配料计算系统</title>
+    <title>员工餐配料计算系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
     <style>
@@ -464,7 +464,7 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-utensils"></i> 菜单配料计算系统</h1>
+            <h1><i class="fas fa-utensils"></i> 员工餐配料计算系统</h1>
             <p>轻松管理菜品配方，计算所需配料，导出采购清单</p>
         </header>
         
@@ -787,7 +787,7 @@ function exportDishesData() {
     
     // 创建JSON数据
     const dataStr = JSON.stringify(dishes, null, 2);
-    const fileName = '菜品数据_' + new Date().toISOString().slice(0, 10) + '.json';
+    const fileName = '员工餐用量数据_' + new Date().toISOString().slice(0, 10) + '.json';
     
     // 使用兼容性下载函数
     if (!downloadFile(dataStr, fileName)) {
