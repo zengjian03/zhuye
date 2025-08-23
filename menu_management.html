@@ -563,6 +563,13 @@
             color: var(--danger-color);
         }
         
+        /* 新增：数据管理按钮样式 */
+        .data-management {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -580,6 +587,10 @@
             .actions-container {
                 flex-direction: column;
             }
+            
+            .data-management {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -587,7 +598,7 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-utensils"></i> 菜单管理系统</h1>
-            <p>轻松创建、管理和分享您的菜单 - 支持不同分类同名菜品</p>
+            <p>轻松创建、管理和分享您的菜单 - 数据自动保存在浏览器中</p>
         </header>
         
         <!-- 左侧菜单区域 -->
@@ -608,6 +619,13 @@
             <button id="copy-menu" class="btn copy-btn btn-block">
                 <i class="fas fa-copy"></i> 复制菜单到剪贴板
             </button>
+            
+            <!-- 新增：数据管理按钮 -->
+            <div class="data-management">
+                <button id="clear-menu" class="btn remove-btn">
+                    <i class="fas fa-trash-alt"></i> 清空菜单
+                </button>
+            </div>
         </div>
         
         <!-- 右侧菜品库区域 -->
@@ -672,6 +690,16 @@
                 </div>
                 <button id="add-category" class="btn add-btn">添加分类</button>
             </div>
+            
+            <!-- 新增：数据管理按钮 -->
+            <div class="data-management">
+                <button id="reset-all" class="btn remove-btn">
+                    <i class="fas fa-undo"></i> 重置所有数据
+                </button>
+                <button id="save-all" class="btn manage-btn">
+                    <i class="fas fa-save"></i> 手动保存数据
+                </button>
+            </div>
         </div>
     </div>
     
@@ -692,8 +720,15 @@
     </div>
     
     <script>
-        // 菜品分类数据
-        const dishCategories = ['荤菜', '素菜', '蒸菜', '凉菜', '点心', '一份菜'];
+        // 使用localStorage键名
+        const STORAGE_KEYS = {
+            DISHES: 'menuSystem_dishes',
+            MENU: 'menuSystem_myMenu',
+            CATEGORIES: 'menuSystem_categories'
+        };
+        
+        // 菜品分类数据 - 初始值
+        let dishCategories = ['荤菜', '素菜', '蒸菜', '凉菜', '点心', '一份菜'];
         
         // 菜品库数据 - 使用name作为唯一标识
         let dishes = [];
@@ -702,7 +737,7 @@
         let myMenu = [];
         let currentCategory = "all";
         
-        // 新增：菜单分类相关变量
+        // 菜单分类相关变量
         let currentMenuCategory = "all";
         
         // DOM元素
@@ -729,7 +764,7 @@
         const replaceDishesContainer = document.getElementById('replace-dishes-container');
         const closeModalBtn = document.querySelector('.close-modal');
         
-        // 新增：菜单分类标签DOM
+        // 菜单分类标签DOM
         const menuCategoryTabs = document.getElementById('menu-category-tabs');
         
         // 当前替换的菜品信息
@@ -737,12 +772,25 @@
         
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化分类管理
+            // 从localStorage加载数据
+            loadFromLocalStorage();
+            
+            // 初始化UI
             renderCategories();
             renderCategoryTabs();
+            renderMenuCategoryTabs();
             renderDishesByCategory(currentCategory);
+            renderMenu();
             
             // 设置事件监听器
+            setupEventListeners();
+            
+            // 显示加载成功消息
+            showNotification('数据已从本地存储加载', 'success');
+        });
+        
+        // 设置所有事件监听器
+        function setupEventListeners() {
             dishSearch.addEventListener('input', filterDishes);
             copyMenuBtn.addEventListener('click', copyMenuToClipboard);
             exportDishesBtn.addEventListener('click', exportDishes);
@@ -757,38 +805,99 @@
             categoryTabs.addEventListener('click', function(e) {
                 const tab = e.target.closest('.category-tab');
                 if (tab) {
-                    // 更新标签状态
-                    document.querySelectorAll('.category-tab').forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    tab.classList.add('active');
-                    
-                    // 更新当前分类
-                    currentCategory = tab.dataset.category;
-                    
-                    // 渲染对应分类的菜品
-                    renderDishesByCategory(currentCategory);
+                    updateCategoryTab(tab);
                 }
             });
             
-            // 新增：菜单分类标签事件监听
+            // 菜单分类标签事件
             menuCategoryTabs.addEventListener('click', function(e) {
                 const tab = e.target.closest('.menu-category-tab');
                 if (tab) {
-                    // 更新标签状态
-                    document.querySelectorAll('.menu-category-tab').forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    tab.classList.add('active');
-                    
-                    // 更新当前菜单分类
-                    currentMenuCategory = tab.dataset.category;
-                    
-                    // 重新渲染菜单
-                    renderMenu();
+                    updateMenuCategoryTab(tab);
                 }
             });
-        });
+            
+            // 新增：清空菜单按钮
+            document.getElementById('clear-menu').addEventListener('click', clearMenu);
+            
+            // 新增：重置所有数据按钮
+            document.getElementById('reset-all').addEventListener('click', resetAllData);
+            
+            // 新增：手动保存按钮
+            document.getElementById('save-all').addEventListener('click', function() {
+                saveToLocalStorage();
+                showNotification('数据已手动保存到本地存储', 'success');
+            });
+            
+            // 监听窗口关闭事件，自动保存
+            window.addEventListener('beforeunload', function(e) {
+                saveToLocalStorage();
+            });
+        }
+        
+        // 更新分类标签状态
+        function updateCategoryTab(tab) {
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            tab.classList.add('active');
+            
+            currentCategory = tab.dataset.category;
+            renderDishesByCategory(currentCategory);
+        }
+        
+        // 更新菜单分类标签状态
+        function updateMenuCategoryTab(tab) {
+            document.querySelectorAll('.menu-category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            tab.classList.add('active');
+            
+            currentMenuCategory = tab.dataset.category;
+            renderMenu();
+        }
+        
+        // 从localStorage加载数据
+        function loadFromLocalStorage() {
+            // 加载菜品库
+            const savedDishes = localStorage.getItem(STORAGE_KEYS.DISHES);
+            if (savedDishes) {
+                try {
+                    dishes = JSON.parse(savedDishes);
+                } catch (e) {
+                    console.error('解析菜品库数据失败:', e);
+                    dishes = [];
+                }
+            }
+            
+            // 加载我的菜单
+            const savedMenu = localStorage.getItem(STORAGE_KEYS.MENU);
+            if (savedMenu) {
+                try {
+                    myMenu = JSON.parse(savedMenu);
+                } catch (e) {
+                    console.error('解析菜单数据失败:', e);
+                    myMenu = [];
+                }
+            }
+            
+            // 加载分类
+            const savedCategories = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+            if (savedCategories) {
+                try {
+                    dishCategories = JSON.parse(savedCategories);
+                } catch (e) {
+                    console.error('解析分类数据失败:', e);
+                }
+            }
+        }
+        
+        // 保存数据到localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem(STORAGE_KEYS.DISHES, JSON.stringify(dishes));
+            localStorage.setItem(STORAGE_KEYS.MENU, JSON.stringify(myMenu));
+            localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(dishCategories));
+        }
         
         // 渲染分类管理
         function renderCategories() {
@@ -832,6 +941,9 @@
             renderCategoryTabs();
             newCategoryInput.value = '';
             
+            // 保存到localStorage
+            saveToLocalStorage();
+            
             showNotification(`分类 "${categoryName}" 添加成功`, 'success');
         }
         
@@ -852,6 +964,9 @@
             renderCategories();
             renderCategoryTabs();
             renderDishesByCategory(currentCategory);
+            
+            // 保存到localStorage
+            saveToLocalStorage();
             
             showNotification(`分类 "${categoryName}" 已删除`, 'success');
         }
@@ -954,9 +1069,12 @@
             }
             
             myMenu.push({...dish});
-            // 新增：更新菜单分类标签
             renderMenuCategoryTabs();
             renderMenu();
+            
+            // 保存到localStorage
+            saveToLocalStorage();
+            
             showNotification(`"${dish.name}" 已添加到菜单`, 'success');
         }
         
@@ -967,13 +1085,16 @@
             
             const dishNameToRemove = myMenu[dishIndex].name;
             myMenu.splice(dishIndex, 1);
-            // 新增：更新菜单分类标签
             renderMenuCategoryTabs();
             renderMenu();
+            
+            // 保存到localStorage
+            saveToLocalStorage();
+            
             showNotification(`"${dishNameToRemove}" 已从菜单中移除`, 'success');
         }
         
-        // 新增：渲染菜单分类标签
+        // 渲染菜单分类标签
         function renderMenuCategoryTabs() {
             // 获取菜单中所有分类（去重）
             const categories = [...new Set(myMenu.map(item => item.category))];
@@ -1019,7 +1140,7 @@
             
             menuList.innerHTML = '';
             
-            // 新增：根据当前选中的分类过滤菜单项
+            // 根据当前选中的分类过滤菜单项
             const filteredMenu = currentMenuCategory === 'all' 
                 ? myMenu 
                 : myMenu.filter(item => item.category === currentMenuCategory);
@@ -1144,6 +1265,9 @@
             // 重新渲染菜单和菜单分类标签
             renderMenuCategoryTabs();
             renderMenu();
+            
+            // 保存到localStorage
+            saveToLocalStorage();
             
             // 关闭模态框
             closeReplaceModal();
@@ -1324,6 +1448,9 @@
                     renderDishesByCategory(currentCategory);
                     filterDishes();
                     
+                    // 保存到localStorage
+                    saveToLocalStorage();
+                    
                     showNotification('菜品库导入成功', 'success');
                 } catch (error) {
                     console.error('导入失败:', error);
@@ -1382,6 +1509,9 @@
             renderDishesByCategory(currentCategory);
             hideAddForm();
             
+            // 保存到localStorage
+            saveToLocalStorage();
+            
             showNotification(`"${dishName}" 已添加到菜品库`, 'success');
         }
         
@@ -1417,7 +1547,59 @@
             renderMenu();
             renderDishesByCategory(currentCategory);
             
+            // 保存到localStorage
+            saveToLocalStorage();
+            
             showNotification(`"${dishName}" 已从菜品库中删除`, 'success');
+        }
+        
+        // 清空菜单
+        function clearMenu() {
+            if (myMenu.length === 0) {
+                showNotification('菜单已经是空的', 'info');
+                return;
+            }
+            
+            if (!confirm('确定要清空整个菜单吗？此操作不可撤销。')) {
+                return;
+            }
+            
+            myMenu = [];
+            renderMenuCategoryTabs();
+            renderMenu();
+            
+            // 保存到localStorage
+            saveToLocalStorage();
+            
+            showNotification('菜单已清空', 'success');
+        }
+        
+        // 重置所有数据
+        function resetAllData() {
+            if (!confirm('确定要重置所有数据吗？这将清除所有菜品、菜单和自定义分类。此操作不可撤销！')) {
+                return;
+            }
+            
+            // 重置数据
+            dishCategories = ['荤菜', '素菜', '蒸菜', '凉菜', '点心', '一份菜'];
+            dishes = [];
+            myMenu = [];
+            currentCategory = "all";
+            currentMenuCategory = "all";
+            
+            // 清空localStorage
+            localStorage.removeItem(STORAGE_KEYS.DISHES);
+            localStorage.removeItem(STORAGE_KEYS.MENU);
+            localStorage.removeItem(STORAGE_KEYS.CATEGORIES);
+            
+            // 重新渲染UI
+            renderCategories();
+            renderCategoryTabs();
+            renderMenuCategoryTabs();
+            renderDishesByCategory(currentCategory);
+            renderMenu();
+            
+            showNotification('所有数据已重置', 'success');
         }
         
         // 显示通知
