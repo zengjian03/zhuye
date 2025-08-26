@@ -1191,7 +1191,8 @@ function showManualSavePrompt(content, fileName) {
                 
                 // 计算该菜品的配料
                 dish.ingredients.forEach(ingredient => {
-                    const amount = ingredient.amount * dish.quantity;
+                    //const amount = ingredient.amount * dish.quantity;
+					const amount = parseFloat((ingredient.amount * dish.quantity).toFixed(2));
                     
                     // 添加到菜品详情
                     dishDetails[dish.name].ingredients.push({
