@@ -101,10 +101,22 @@
             border-bottom: 1px solid #eee;
             align-items: center;
             transition: all 0.3s;
+            cursor: grab;
         }
         
         .menu-item:hover {
             background-color: #f9f9f9;
+        }
+        
+        .menu-item.dragging {
+            background-color: #e0f7fa;
+            opacity: 0.8;
+            border: 2px dashed var(--primary-color);
+        }
+        
+        .menu-item.drag-over {
+            background-color: #e0f7fa;
+            border-top: 2px solid var(--primary-color);
         }
         
         .menu-item .number {
@@ -570,6 +582,18 @@
             margin-top: 15px;
         }
         
+        /* 拖拽排序提示 */
+        .drag-hint {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -615,6 +639,9 @@
                     <i class="fas fa-inbox" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
                     <p>从右侧菜品库添加菜品到菜单</p>
                 </div>
+            </div>
+            <div class="drag-hint">
+                <i class="fas fa-info-circle"></i> 提示：拖动菜品可重新排序
             </div>
             <button id="copy-menu" class="btn copy-btn btn-block">
                 <i class="fas fa-copy"></i> 复制菜单到剪贴板
@@ -728,7 +755,7 @@
         };
         
         // 菜品分类数据 - 初始值
-        let dishCategories = ['荤菜', '素菜', '蒸菜', '凉菜', '点心', '一份菜'];
+        let dishCategories = ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
         
         // 菜品库数据 - 使用name作为唯一标识
         let dishes = [];
@@ -770,6 +797,9 @@
         // 当前替换的菜品信息
         let currentReplacement = null;
         
+        // 拖拽相关变量
+        let draggedItem = null;
+        
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             // 从localStorage加载数据
@@ -785,9 +815,115 @@
             // 设置事件监听器
             setupEventListeners();
             
+            // 初始化拖拽功能
+            initDragAndDrop();
+            
             // 显示加载成功消息
             showNotification('数据已从本地存储加载', 'success');
         });
+        
+        // 初始化拖拽功能
+        function initDragAndDrop() {
+            menuList.addEventListener('dragstart', handleDragStart);
+            menuList.addEventListener('dragover', handleDragOver);
+            menuList.addEventListener('dragenter', handleDragEnter);
+            menuList.addEventListener('dragleave', handleDragLeave);
+            menuList.addEventListener('drop', handleDrop);
+            menuList.addEventListener('dragend', handleDragEnd);
+        }
+        
+        // 拖拽开始
+        function handleDragStart(e) {
+            draggedItem = e.target.closest('.menu-item');
+            if (!draggedItem) return;
+            
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', draggedItem.dataset.index);
+            
+            // 添加拖拽样式
+            draggedItem.classList.add('dragging');
+            
+            // 设置半透明效果
+            setTimeout(() => {
+                draggedItem.style.opacity = '0.4';
+            }, 0);
+        }
+        
+        // 拖拽经过
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+        
+        // 拖拽进入
+        function handleDragEnter(e) {
+            const targetItem = e.target.closest('.menu-item');
+            if (!targetItem || targetItem === draggedItem) return;
+            
+            // 添加悬停样式
+            targetItem.classList.add('drag-over');
+        }
+        
+        // 拖拽离开
+        function handleDragLeave(e) {
+            const targetItem = e.target.closest('.menu-item');
+            if (!targetItem || targetItem === draggedItem) return;
+            
+            // 移除悬停样式
+            targetItem.classList.remove('drag-over');
+        }
+        
+        // 放置
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetItem = e.target.closest('.menu-item');
+            if (!targetItem || !draggedItem || targetItem === draggedItem) return;
+            
+            // 移除悬停样式
+            targetItem.classList.remove('drag-over');
+            
+            // 获取拖拽元素和目标元素的索引
+            const fromIndex = parseInt(draggedItem.dataset.index);
+            const toIndex = parseInt(targetItem.dataset.index);
+            
+            if (fromIndex === toIndex) return;
+            
+            // 重新排序菜单项
+            reorderMenuItems(fromIndex, toIndex);
+            
+            return false;
+        }
+        
+        // 拖拽结束
+        function handleDragEnd(e) {
+            // 移除拖拽样式
+            if (draggedItem) {
+                draggedItem.classList.remove('dragging');
+                draggedItem.style.opacity = '1';
+                draggedItem = null;
+            }
+            
+            // 移除所有悬停样式
+            document.querySelectorAll('.menu-item.drag-over').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+        
+        // 重新排序菜单项
+        function reorderMenuItems(fromIndex, toIndex) {
+            // 移动数组中的元素
+            const [movedItem] = myMenu.splice(fromIndex, 1);
+            myMenu.splice(toIndex, 0, movedItem);
+            
+            // 重新渲染菜单
+            renderMenu();
+            
+            // 保存到localStorage
+            saveToLocalStorage();
+            
+            showNotification('菜单顺序已更新', 'success');
+        }
         
         // 设置所有事件监听器
         function setupEventListeners() {
@@ -1159,6 +1295,8 @@
             filteredMenu.forEach((dish, index) => {
                 const menuItem = document.createElement('div');
                 menuItem.className = 'menu-item';
+                menuItem.setAttribute('draggable', 'true');
+                menuItem.dataset.index = myMenu.indexOf(dish); // 存储全局索引
                 menuItem.innerHTML = `
                     <div>
                         <span class="number">${index + 1}</span>
@@ -1299,7 +1437,7 @@
             
             // 按指定顺序构建文本
             const categoriesOrder = dishCategories;
-            let menuText = "我的菜单\n\n";
+            let menuText = "门店菜单\n\n";
             
             categoriesOrder.forEach(category => {
                 if (groupedMenu[category] && groupedMenu[category].length > 0) {
@@ -1582,7 +1720,7 @@
             }
             
             // 重置数据
-            dishCategories = ['荤菜', '素菜', '蒸菜', '凉菜', '点心', '一份菜'];
+            dishCategories = ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
             dishes = [];
             myMenu = [];
             currentCategory = "all";

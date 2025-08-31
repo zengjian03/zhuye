@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菜单管理系统</title>
+    <title>员工餐菜单管理系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -485,8 +485,8 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-utensils"></i> 菜单管理系统</h1>
-            <p>轻松创建、管理和分享您的菜单 - 使用名称标识菜品</p>
+            <h1><i class="fas fa-utensils"></i>员工餐菜单管理系统</h1>
+            <p>轻松创建、管理和分享您的菜单</p>
         </header>
         
         <!-- 左侧菜单区域 -->
@@ -803,6 +803,7 @@
                     </div>
                 `;
                 menuList.appendChild(menuItem);
+				//保存
             });
         }
         
@@ -1019,7 +1020,7 @@
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             
             // 创建下载链接
-            const exportFileDefaultName = '员工餐菜品库_' + new Date().toISOString().slice(0, 10) + '.json';
+            const exportFileDefaultName = '员工餐菜单库_' + new Date().toISOString().slice(0, 10) + '.json';
             
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);

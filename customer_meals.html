@@ -559,7 +559,7 @@
                     </div>
                 </div>
                 <button id="copy-menu" class="btn copy-btn btn-block">
-                    <i class="fas fa-copy"></i> 复制菜单
+                    <i class="fas fa-copy"></i> 保存菜单
                 </button>
             </div>
             
@@ -786,12 +786,10 @@
         function saveToLocalStorage() {
             localStorage.setItem('porscheMenu', JSON.stringify(myMenu));
             localStorage.setItem('porscheDishes', JSON.stringify(dishes));
-            
             let remark = '';
             if (remarkSoup.checked) remark = remarkSoup.value;
             if (remarkYogurt.checked) remark = remarkYogurt.value;
             localStorage.setItem('porscheRemark', remark);
-            
             // 保存计算结果
             localStorage.setItem('porscheResults', resultsContainer.textContent);
         }
@@ -837,7 +835,6 @@
             
             myMenu.push({...dish});
             renderMenu();
-            showNotification(`"${dish.name}" 已添加到菜单`, 'success');
             saveToLocalStorage(); // 保存到本地存储
         }
         
@@ -845,7 +842,6 @@
             const dishName = myMenu[index].name;
             myMenu.splice(index, 1);
             renderMenu();
-            showNotification(`"${dishName}" 已从菜单中移除`, 'success');
             saveToLocalStorage(); // 保存到本地存储
         }
         
@@ -853,7 +849,6 @@
             myMenu[currentReplaceIndex] = {...newDish};
             renderMenu();
             closeReplaceModal();
-            showNotification(`菜品已替换为 "${newDish.name}"`, 'success');
             saveToLocalStorage(); // 保存到本地存储
         }
         // 渲染菜品库
@@ -914,7 +909,6 @@
             
             myMenu.push({...dish});
             renderMenu();
-            showNotification(`"${dish.name}" 已添加到菜单`, 'success');
         }
         
         // 从菜单中移除
@@ -922,7 +916,6 @@
             const dishName = myMenu[index].name;
             myMenu.splice(index, 1);
             renderMenu();
-            showNotification(`"${dishName}" 已从菜单中移除`, 'success');
         }
         
         // 渲染菜单
@@ -956,6 +949,7 @@
                 `;
                 menuList.appendChild(menuItem);
             });
+			saveToLocalStorage(); // 保存到本地存储
         }
         
         // 打开换菜模态框
@@ -996,24 +990,9 @@
         
         // 复制菜单到剪贴板
         function copyMenuToClipboard() {
-            if (myMenu.length === 0) {
-                showNotification('菜单为空，无法复制', 'error');
-                return;
-            }
-            
-            let menuText = "我的菜单：\n\n";
-            myMenu.forEach((dish, index) => {
-                menuText += `${index + 1}. ${dish.name}\n`;
-            });
-            
-            navigator.clipboard.writeText(menuText)
-                .then(() => {
-                    showNotification('菜单已复制到剪贴板', 'success');
-                })
-                .catch(err => {
-                    console.error('复制失败:', err);
-                    showNotification('复制失败，请重试', 'error');
-                });
+		saveToLocalStorage(); // 保存到本地存储
+        showNotification('菜单已保存到本地存储', 'success');
+                
         }
         
         // 计算配料
