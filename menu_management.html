@@ -408,86 +408,6 @@
             gap: 10px;
         }
         
-        /* 换菜模态框样式 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            width: 80%;
-            max-width: 600px;
-            max-height: 80%;
-            overflow: auto;
-            position: relative;
-        }
-        
-        .modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #aaa;
-        }
-        
-        .close-modal:hover {
-            color: var(--dark-color);
-        }
-        
-        .replace-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .replace-dish {
-            background-color: #f8f9fa;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #eee;
-        }
-        
-        .replace-dish:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-3px);
-        }
-        
-        .replace-category {
-            margin-top: 20px;
-            font-weight: 600;
-            color: var(--primary-color);
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
-        }
-        
         /* 新增：菜单分类标签样式 */
         .menu-category-tabs {
             display: flex;
@@ -594,6 +514,29 @@
             gap: 5px;
         }
         
+        /* 排序按钮样式（已删除） */
+        
+        /* 换菜模式提示 */
+        .replace-mode-message {
+            background-color: #fff3e0;
+            border-left: 4px solid var(--warning-color);
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .replace-mode-message p {
+            margin: 0;
+        }
+        
+        .replacing {
+            background-color: #fff3e0 !important;
+            border: 2px solid var(--warning-color) !important;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -628,6 +571,7 @@
         <!-- 左侧菜单区域 -->
         <div class="panel">
             <h2><i class="fas fa-clipboard-list"></i> 我的菜单</h2>
+            
             <div class="menu-category-tabs" id="menu-category-tabs">
                 <div class="menu-category-tab active" data-category="all">
                     <span>全部</span>
@@ -669,6 +613,14 @@
                     <span>全部</span>
                     <span class="count">0</span>
                 </div>
+            </div>
+            
+            <!-- 换菜模式提示 -->
+            <div id="replace-mode-message" class="replace-mode-message" style="display: none;">
+                <p>正在替换菜品：<strong id="replacing-dish-name"></strong>，请从下方选择一个菜品替换</p>
+                <button id="cancel-replace" class="btn remove-btn">
+                    <i class="fas fa-times"></i> 取消
+                </button>
             </div>
             
             <div class="dishes-grid" id="dishes-grid">
@@ -733,19 +685,6 @@
     <!-- 通知区域 -->
     <div id="notification" class="notification"></div>
     
-    <!-- 换菜模态框 -->
-    <div id="replace-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-exchange-alt"></i> 选择替换菜品</h3>
-            </div>
-            <div id="replace-dishes-container">
-                <!-- 替换菜品将通过JS动态生成 -->
-            </div>
-        </div>
-    </div>
-    
     <script>
         // 使用localStorage键名
         const STORAGE_KEYS = {
@@ -767,6 +706,10 @@
         // 菜单分类相关变量
         let currentMenuCategory = "all";
         
+        // 换菜模式相关变量
+        let replaceMode = false;
+        let replaceTarget = null;
+        
         // DOM元素
         const menuList = document.getElementById('menu-list');
         const dishesGrid = document.getElementById('dishes-grid');
@@ -785,17 +728,12 @@
         const categoryList = document.getElementById('category-list');
         const addCategoryBtn = document.getElementById('add-category');
         const newCategoryInput = document.getElementById('new-category');
-        
-        // 换菜相关DOM
-        const replaceModal = document.getElementById('replace-modal');
-        const replaceDishesContainer = document.getElementById('replace-dishes-container');
-        const closeModalBtn = document.querySelector('.close-modal');
+        const replaceModeMessage = document.getElementById('replace-mode-message');
+        const replacingDishName = document.getElementById('replacing-dish-name');
+        const cancelReplaceBtn = document.getElementById('cancel-replace');
         
         // 菜单分类标签DOM
         const menuCategoryTabs = document.getElementById('menu-category-tabs');
-        
-        // 当前替换的菜品信息
-        let currentReplacement = null;
         
         // 拖拽相关变量
         let draggedItem = null;
@@ -934,8 +872,8 @@
             showAddFormBtn.addEventListener('click', showAddForm);
             addDishBtn.addEventListener('click', addNewDish);
             cancelAddBtn.addEventListener('click', hideAddForm);
-            closeModalBtn.addEventListener('click', closeReplaceModal);
             addCategoryBtn.addEventListener('click', addNewCategory);
+            cancelReplaceBtn.addEventListener('click', cancelReplace);
             
             // 分类标签事件
             categoryTabs.addEventListener('click', function(e) {
@@ -1151,21 +1089,50 @@
         function renderDishes(dishesArray) {
             dishesGrid.innerHTML = '';
             
+            // 如果是换菜模式，显示提示信息
+            if (replaceMode) {
+                const replaceModeHtml = `
+                    <div class="replace-mode-message">
+                        <p>正在替换菜品：<strong>${replaceTarget}</strong>，请从下方选择一个菜品替换</p>
+                        <button id="cancel-replace" class="btn remove-btn">
+                            <i class="fas fa-times"></i> 取消
+                        </button>
+                    </div>
+                `;
+                dishesGrid.innerHTML = replaceModeHtml;
+                document.getElementById('cancel-replace').addEventListener('click', cancelReplace);
+            }
+            
             if (dishesArray.length === 0) {
-                dishesGrid.innerHTML = '<div class="no-results">没有找到菜品</div>';
+                dishesGrid.innerHTML += '<div class="no-results">没有找到菜品</div>';
                 return;
             }
             
             dishesArray.forEach(dish => {
                 const dishCard = document.createElement('div');
                 dishCard.className = 'dish-card';
+                
+                // 根据模式显示不同按钮
+                let actionButton = '';
+                if (replaceMode) {
+                    actionButton = `
+                        <button class="btn replace-btn" onclick="executeReplace('${dish.name.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-exchange-alt"></i> 替换
+                        </button>
+                    `;
+                } else {
+                    actionButton = `
+                        <button class="btn add-btn" onclick="addToMenu('${dish.name.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-plus"></i> 添加
+                        </button>
+                    `;
+                }
+                
                 dishCard.innerHTML = `
                     <div class="dish-category">${dish.category}</div>
                     <div class="dish-name">${dish.name}</div>
                     <div class="dish-actions">
-                        <button class="btn add-btn" onclick="addToMenu('${dish.name.replace(/'/g, "\\'")}')">
-                            <i class="fas fa-plus"></i> 添加
-                        </button>
+                        ${actionButton}
                         <button class="btn remove-btn" onclick="deleteDish('${dish.name.replace(/'/g, "\\'")}')">
                             <i class="fas fa-trash"></i> 删除
                         </button>
@@ -1193,18 +1160,26 @@
             renderDishes(filteredDishes);
         }
         
-        // 添加到菜单
+        // 添加到菜单（根据当前菜单分类）
         function addToMenu(dishName) {
             const dish = dishes.find(d => d.name === dishName);
             if (!dish) return;
             
             // 检查是否已在菜单中
-            if (myMenu.some(item => item.name === dishName && item.category === dish.category)) {
+            if (myMenu.some(item => item.name === dishName)) {
                 showNotification(`"${dish.name}" 已在菜单中`, 'error');
                 return;
             }
             
-            myMenu.push({...dish});
+            // 创建新菜品副本
+            const newDish = {...dish};
+            
+            // 如果当前菜单分类不是"全部"，则使用当前菜单分类
+            if (currentMenuCategory !== "all") {
+                newDish.category = currentMenuCategory;
+            }
+            
+            myMenu.push(newDish);
             renderMenuCategoryTabs();
             renderMenu();
             
@@ -1297,13 +1272,15 @@
                 menuItem.className = 'menu-item';
                 menuItem.setAttribute('draggable', 'true');
                 menuItem.dataset.index = myMenu.indexOf(dish); // 存储全局索引
+                menuItem.dataset.dishName = dish.name; // 存储菜品名称
                 menuItem.innerHTML = `
                     <div>
                         <span class="number">${index + 1}</span>
                         ${dish.name}
+                        <span class="category" style="font-size: 0.8rem; color: #666; margin-left: 10px;">${dish.category}</span>
                     </div>
                     <div class="actions">
-                        <button class="btn replace-btn" onclick="openReplaceModal('${dish.name.replace(/'/g, "\\'")}', ${index})">
+                        <button class="btn replace-btn" onclick="startReplace('${dish.name.replace(/'/g, "\\'")}')">
                             <i class="fas fa-exchange-alt"></i> 换菜
                         </button>
                         <button class="btn remove-btn" onclick="removeFromMenu('${dish.name.replace(/'/g, "\\'")}')">
@@ -1315,108 +1292,80 @@
             });
         }
         
-        // 打开换菜模态框
-        function openReplaceModal(dishName, menuIndex) {
-            const dish = dishes.find(d => d.name === dishName);
-            if (!dish) return;
+        // 开始换菜模式
+        function startReplace(dishName) {
+            replaceMode = true;
+            replaceTarget = dishName;
             
-            // 存储当前替换信息
-            currentReplacement = {
-                dishName: dishName,
-                menuIndex: menuIndex,
-                category: dish.category
-            };
-            
-            // 显示模态框
-            replaceModal.style.display = 'flex';
-            
-            // 渲染替换菜品
-            renderReplaceDishes(dish.category, dishName);
-        }
-        
-        // 渲染替换菜品
-        function renderReplaceDishes(category, excludeName) {
-            replaceDishesContainer.innerHTML = '';
-            
-            // 获取相同分类的菜品（排除当前菜品）
-            const sameCategoryDishes = dishes.filter(d => 
-                d.category === category && d.name !== excludeName
-            );
-            
-            // 按类别分组
-            const dishesByCategory = {};
-            dishes.forEach(dish => {
-                if (dish.name === excludeName) return;
-                if (!dishesByCategory[dish.category]) {
-                    dishesByCategory[dish.category] = [];
+            // 高亮当前要替换的菜品
+            document.querySelectorAll('.menu-item').forEach(item => {
+                if (item.dataset.dishName === dishName) {
+                    item.classList.add('replacing');
                 }
-                dishesByCategory[dish.category].push(dish);
             });
             
-            // 优先显示相同分类
-            if (sameCategoryDishes.length > 0) {
-                const sameCategorySection = document.createElement('div');
-                sameCategorySection.innerHTML = `
-                    <div class="replace-category">${category}（同类推荐）</div>
-                    <div class="replace-grid">
-                        ${sameCategoryDishes.map(dish => `
-                            <div class="replace-dish" onclick="selectReplacement('${dish.name.replace(/'/g, "\\'")}')">
-                                ${dish.name}
-                                <div style="font-size: 0.8rem; color: #666;">${dish.category}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                replaceDishesContainer.appendChild(sameCategorySection);
-            }
+            // 重新渲染菜品库（进入换菜模式）
+            renderDishesByCategory(currentCategory);
             
-            // 添加其他分类的菜品
-            for (const cat in dishesByCategory) {
-                if (cat === category) continue; // 跳过当前分类
-                
-                const categorySection = document.createElement('div');
-                categorySection.innerHTML = `
-                    <div class="replace-category">${cat}</div>
-                    <div class="replace-grid">
-                        ${dishesByCategory[cat].map(dish => `
-                            <div class="replace-dish" onclick="selectReplacement('${dish.name.replace(/'/g, "\\'")}')">
-                                ${dish.name}
-                                <div style="font-size: 0.8rem; color: #666;">${dish.category}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                replaceDishesContainer.appendChild(categorySection);
-            }
+            // 显示提示信息
+            replacingDishName.textContent = dishName;
+            replaceModeMessage.style.display = 'flex';
+            
+            showNotification('请从右侧菜品库中选择一个菜品进行替换', 'info');
         }
         
-        // 选择替换菜品
-        function selectReplacement(newDishName) {
-            if (!currentReplacement) return;
+        // 执行替换
+        function executeReplace(newDishName) {
+            if (!replaceMode || !replaceTarget) return;
+            
+            // 执行替换
+            replaceDish(replaceTarget, newDishName);
+            
+            // 退出换菜模式
+            cancelReplace();
+            
+            showNotification(`"${replaceTarget}" 已被替换为 "${newDishName}"`, 'success');
+        }
+        
+        // 取消换菜
+        function cancelReplace() {
+            replaceMode = false;
+            replaceTarget = null;
+            
+            // 移除高亮
+            document.querySelectorAll('.menu-item.replacing').forEach(item => {
+                item.classList.remove('replacing');
+            });
+            
+            // 隐藏提示信息
+            replaceModeMessage.style.display = 'none';
+            
+            // 重新渲染菜品库（退出换菜模式）
+            renderDishesByCategory(currentCategory);
+        }
+        
+        // 替换菜品
+        function replaceDish(oldDishName, newDishName) {
+            const dishIndex = myMenu.findIndex(d => d.name === oldDishName);
+            if (dishIndex === -1) return;
             
             const newDish = dishes.find(d => d.name === newDishName);
             if (!newDish) return;
             
-            // 替换菜单中的菜品
-            myMenu[currentReplacement.menuIndex] = {...newDish};
+            // 保留原来的分类
+            const originalCategory = myMenu[dishIndex].category;
             
-            // 重新渲染菜单和菜单分类标签
-            renderMenuCategoryTabs();
+            // 替换菜品
+            myMenu[dishIndex] = {
+                ...newDish,
+                category: originalCategory
+            };
+            
+            // 重新渲染菜单
             renderMenu();
             
             // 保存到localStorage
             saveToLocalStorage();
-            
-            // 关闭模态框
-            closeReplaceModal();
-            
-            showNotification(`已将 "${currentReplacement.dishName}" 替换为 "${newDish.name}"`, 'success');
-        }
-        
-        // 关闭换菜模态框
-        function closeReplaceModal() {
-            replaceModal.style.display = 'none';
-            currentReplacement = null;
         }
         
         // 复制菜单到剪贴板
@@ -1688,7 +1637,6 @@
             
             // 保存到localStorage
             saveToLocalStorage();
-            
             showNotification(`"${dishName}" 已从菜品库中删除`, 'success');
         }
         
