@@ -865,7 +865,7 @@
             
             // 关闭模态框
             closeEditModal();
-            localStorage.setItem('dishes', JSON.stringify(dishes));
+            localStorage.setItem('staff_menu_dishes', JSON.stringify(dishes));
             showNotification(`菜品 "${oldName}" 已更新为 "${newName}"`, 'success');
         }
         
@@ -1071,7 +1071,7 @@
                     // 重新渲染
                     renderDishesByCategory(currentCategory);
                     renderMenu();
-                    localStorage.setItem('dishes', JSON.stringify(dishes));
+                    localStorage.setItem('staff_menu_dishes', JSON.stringify(dishes));
                     showNotification('菜品库导入成功，已覆盖本地数据', 'success');
                 } catch (error) {
                     console.error('导入失败:', error);
@@ -1127,7 +1127,7 @@
             dishes.push(newDish);
             renderDishesByCategory(currentCategory);
             hideAddForm();
-            localStorage.setItem('dishes', JSON.stringify(dishes));
+            localStorage.setItem('staff_menu_dishes', JSON.stringify(dishes));
             showNotification(`"${dishName}" 已添加到菜品库`, 'success');
         }
         
@@ -1160,7 +1160,7 @@
             // 重新渲染
             renderMenu();
             renderDishesByCategory(currentCategory);
-            localStorage.setItem('dishes', JSON.stringify(dishes));
+            localStorage.setItem('staff_menu_dishes', JSON.stringify(dishes));
             showNotification(`"${dishName}" 已从菜品库中删除`, 'success');
         }
         

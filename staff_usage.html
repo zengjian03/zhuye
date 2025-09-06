@@ -758,7 +758,7 @@
                     
                     // 保存导入的数据
                     dishes = importedDishes;
-                    localStorage.setItem('dishes', JSON.stringify(dishes));
+                    localStorage.setItem('staff_usaga_dishes', JSON.stringify(dishes));
                     
                     // 更新UI
                     populateDishSelect();
@@ -940,7 +940,7 @@ function showManualSavePrompt(content, fileName) {
             
             const dish = { name, ingredients };
             dishes.push(dish);
-            localStorage.setItem('dishes', JSON.stringify(dishes));
+            localStorage.setItem('staff_usaga_dishes', JSON.stringify(dishes));
             populateDishSelect();
             
             // 重置表单
@@ -1029,7 +1029,7 @@ function showManualSavePrompt(content, fileName) {
             
             // 删除原菜品
             dishes.splice(index, 1);
-            localStorage.setItem('dishes', JSON.stringify(dishes));
+            localStorage.setItem('staff_usaga_dishes', JSON.stringify(dishes));
             renderSavedDishes();
             
             showNotification(`正在编辑 "${dish.name}"`, 'success');
@@ -1040,7 +1040,7 @@ function showManualSavePrompt(content, fileName) {
             const dishName = dishes[index].name;
             if (confirm(`确定要删除菜品 "${dishName}" 吗？`)) {
                 dishes.splice(index, 1);
-                localStorage.setItem('dishes', JSON.stringify(dishes));
+                localStorage.setItem('staff_usaga_dishes', JSON.stringify(dishes));
                 populateDishSelect();
                 renderSavedDishes();
                 showNotification(`"${dishName}" 已删除`, 'success');
