@@ -145,7 +145,7 @@
         .section-actions {
             display: flex;
             gap: 5px;
-        }
+}
         
         .action-btn {
             padding: 5px 10px;
@@ -729,6 +729,37 @@
             background-color: #6c757d;
             color: white;
         }
+        
+        /* 新增：索引追踪提示 */
+        .index-info {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #4a6fa5;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .debug-info {
+            position: absolute;
+            bottom: 70px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #666;
+            border: 1px solid #e0e0e0;
+            max-width: 300px;
+            display: none;
+        }
+        
+        .debug-info.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -788,6 +819,9 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 调试信息 -->
+        <div class="debug-info" id="debug-info"></div>
         
         <!-- 底部操作栏 -->
         <div class="bottom-actions">
@@ -913,7 +947,10 @@
                 myMenu = [
                     { name: "韭菜炒田螺", category: "荤菜" },
                     { name: "蒜蓉西兰花", category: "素菜" },
-                    { name: "凉拌黄瓜", category: "凉菜" }
+                    { name: "凉拌黄瓜", category: "凉菜" },
+                    { name: "红烧肉", category: "荤菜" },
+                    { name: "清炒时蔬", category: "素菜" },
+                    { name: "白灼虾", category: "荤菜" }
                 ];
             }
             
@@ -927,7 +964,9 @@
                     { name: "红烧排骨", category: "荤菜" },
                     { name: "清炒时蔬", category: "素菜" },
                     { name: "鱼香肉丝", category: "荤菜" },
-                    { name: "番茄炒蛋", category: "素菜" }
+                    { name: "番茄炒蛋", category: "素菜" },
+                    { name: "宫保鸡丁", category: "荤菜" },
+                    { name: "地三鲜", category: "素菜" }
                 ];
             }
             
@@ -1003,7 +1042,9 @@
                     categoryDishes.className = 'dishes-list';
                     
                     groupedByCategory[category].forEach((dish, index) => {
-                        const dishRow = createDishRow(dish, index + 1);
+                        // 查找在原始菜单数组中的索引
+                        const globalIndex = myMenu.findIndex(item => item.name === dish.name);
+                        const dishRow = createDishRow(dish, index + 1, globalIndex);
                         categoryDishes.appendChild(dishRow);
                     });
                     
@@ -1013,7 +1054,9 @@
             } else {
                 // 非"全部"分类下平铺显示
                 filteredMenu.forEach((dish, index) => {
-                    const dishRow = createDishRow(dish, index + 1);
+                    // 查找在原始菜单数组中的索引
+                    const globalIndex = myMenu.findIndex(item => item.name === dish.name);
+                    const dishRow = createDishRow(dish, index + 1, globalIndex);
                     menuList.appendChild(dishRow);
                 });
             }
@@ -1021,11 +1064,12 @@
             updateMenuTitle();
         }
         
-        // 创建菜品行元素
-        function createDishRow(dish, number) {
+        // 创建菜品行元素 - 修复：添加全局索引参数
+        function createDishRow(dish, displayNumber, globalIndex) {
             const dishRow = document.createElement('div');
             dishRow.className = 'dish-row';
             dishRow.dataset.name = dish.name;
+            dishRow.dataset.globalIndex = globalIndex; // 存储全局索引
             dishRow.draggable = true;
             
             // 高亮搜索词
@@ -1039,16 +1083,16 @@
             }
             
             dishRow.innerHTML = `
-                <div class="dish-number">${number}</div>
+                <div class="dish-number">${displayNumber}</div>
                 <div class="dish-info">
                     <div class="dish-name">${displayName}</div>
                     <div class="dish-category">${displayCategory}</div>
                 </div>
                 <div class="dish-actions">
-                    <div class="icon-btn replace-btn" title="换菜" onclick="startReplace(${number - 1})">
+                    <div class="icon-btn replace-btn" title="换菜" onclick="startReplace(${globalIndex})">
                         <i class="fas fa-exchange-alt"></i>
                     </div>
-                    <div class="icon-btn delete-btn" title="删除" onclick="removeFromMenu(${number - 1})">
+                    <div class="icon-btn delete-btn" title="删除" onclick="removeFromMenu(${globalIndex})">
                         <i class="fas fa-trash"></i>
                     </div>
                     <div class="icon-btn drag-handle" title="拖动排序">
@@ -1220,20 +1264,26 @@
             }
         }
         
-        // 从菜单中移除
-        function removeFromMenu(dishIndex) {
-            if (dishIndex < 0 || dishIndex >= myMenu.length) return;
+        // 从菜单中移除 - 修复：使用全局索引
+        function removeFromMenu(globalIndex) {
+            if (globalIndex < 0 || globalIndex >= myMenu.length) return;
             
-            const dishName = myMenu[dishIndex].name;
-            myMenu.splice(dishIndex, 1);
+            const dishName = myMenu[globalIndex].name;
+            const dishCategory = myMenu[globalIndex].category;
+            
+          
+          
+            myMenu.splice(globalIndex, 1);
             renderMenu();
             saveData();
             showNotification(`"${dishName}" 已从菜单移除`, 'success');
         }
         
         // 开始替换
-        function startReplace(dishIndex) {
-            currentReplacingDishIndex = dishIndex;
+        function startReplace(globalIndex) {
+            if (globalIndex < 0 || globalIndex >= myMenu.length) return;
+            
+            currentReplacingDishIndex = globalIndex;
             document.getElementById('replace-hint').style.display = 'block';
             renderDishLibrary();
         }
@@ -1481,6 +1531,8 @@
             }, 3000);
         }
         
+     
+        
         // 初始化拖拽功能
         function initDragAndDrop() {
             const menuList = document.getElementById('menu-list');
@@ -1621,7 +1673,7 @@
                 this.classList.add('section-focus');
                 document.getElementById('dish-section').classList.remove('section-focus');
             });
-            
+
             // 菜库区域焦点
             document.getElementById('dish-section').addEventListener('click', function() {
                 this.classList.add('section-focus');
