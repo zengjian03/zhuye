@@ -985,15 +985,7 @@
             
             // 根据当前分类筛选菜单
             let filteredMenu = myMenu;
-            
-            // 应用搜索过滤
-            if (currentSearchTerm) {
-                filteredMenu = filteredMenu.filter(dish => 
-                    dish.name.toLowerCase().includes(currentSearchTerm) || 
-                    dish.category.toLowerCase().includes(currentSearchTerm)
-                );
-            }
-            
+  
             // 根据分类筛选 - 修复：始终使用当前分类
             if (currentCategory !== 'all') {
                 filteredMenu = filteredMenu.filter(dish => dish.category === currentCategory);
