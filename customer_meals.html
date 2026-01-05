@@ -545,7 +545,7 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-utensils"></i> 保时捷客户菜单管理系统</h1>
-            
+        
         </header>
         
         <div class="main-content">
@@ -559,7 +559,7 @@
                     </div>
                 </div>
                 <button id="copy-menu" class="btn copy-btn btn-block">
-                    <i class="fas fa-copy"></i> 保存菜单
+                    <i class="fas fa-copy"></i> 复制菜单
                 </button>
             </div>
             
@@ -990,9 +990,42 @@
         
         // 复制菜单到剪贴板
         function copyMenuToClipboard() {
-		saveToLocalStorage(); // 保存到本地存储
-        showNotification('菜单已保存到本地存储', 'success');
-                
+            if (myMenu.length === 0) {
+                showNotification('菜单为空，无法复制', 'error');
+                return;
+            }
+// 获取当前日期并加1天
+            const now = new Date();
+            now.setDate(now.getDate() + 1); // 当前日期加1天
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const dateStr = `${month}月${day}日`;
+            // 构建菜单文本
+            // let menuText = `${dateStr}\n`;
+            let menuText = `客户餐菜单 (${dateStr})\n\n`;
+            myMenu.forEach((dish, index) => {
+                menuText += `${index + 1}. ${dish.name}\n`;
+            
+            });
+            
+            // 尝试使用现代剪贴板API
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(menuText)
+                    .then(() => {
+                        showNotification('菜单已复制到剪贴板', 'success');
+                    })
+                    .catch(err => {
+                        console.log('现代剪贴板API失败，尝试传统方法:', err);
+                        // 现代API失败，使用传统方法
+                        copyWithLegacyMethod(menuText);
+                    });
+            } else {
+                // 浏览器不支持现代剪贴板API，使用传统方法
+                copyWithLegacyMethod(menuText);
+            }
+            
+            // 同时保存到本地存储
+            saveToLocalStorage();
         }
         
         // 计算配料
@@ -1019,7 +1052,8 @@
             }
             
             // 获取当前日期
-            const now = new Date();
+             const now = new Date();
+            now.setDate(now.getDate() + 1); // 当前日期加1天
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const day = now.getDate().toString().padStart(2, '0');
             const dateStr = `${month}月${day}日`;
