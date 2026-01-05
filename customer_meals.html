@@ -1089,7 +1089,7 @@
             // 显示结果
             resultsContainer.textContent = resultText;
             showNotification('配料计算完成', 'success');
-			saveToLocalStorage();
+			//saveToLocalStorage();
             copyResults();
         }
         
@@ -1099,7 +1099,7 @@
                 showNotification('没有可复制的内容', 'error');
                 return;
             }
-            
+            saveToLocalStorage();
             const text = resultsContainer.textContent;
             
             // 尝试使用现代剪贴板API
