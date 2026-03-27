@@ -1367,27 +1367,38 @@
             
             performCopy();
         }
-        
-        // 执行复制操作
-        function performCopy() {
-            // 按分类分组
-            const groupedMenu = {};
-            myMenu.forEach(dish => {
-                if (!groupedMenu[dish.category]) {
-                    groupedMenu[dish.category] = [];
-                }
-                groupedMenu[dish.category].push(dish);
+// 执行复制操作
+function performCopy() {
+    // 定义分类顺序
+    const categoryOrder = ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
+    
+    // 按分类分组
+    const groupedMenu = {};
+    myMenu.forEach(dish => {
+        if (!groupedMenu[dish.category]) {
+            groupedMenu[dish.category] = [];
+        }
+        groupedMenu[dish.category].push(dish);
+    });
+    
+    // 构建菜单文本
+    let menuText = "门店菜单\n\n";
+    
+    // 按照指定顺序输出分类
+    categoryOrder.forEach(category => {
+        if (groupedMenu[category] && groupedMenu[category].length > 0) {
+            menuText += `#${category}\n`;
+            groupedMenu[category].forEach((dish, index) => {
+                menuText += `${index + 1}. ${dish.name}\n`;
             });
-            
-            // 构建菜单文本
-            let menuText = "门店菜单\n\n";
-            for (const category in groupedMenu) {
-                menuText += `#${category}\n`;
-                groupedMenu[category].forEach((dish, index) => {
-                    menuText += `${index + 1}. ${dish.name}\n`;
-                });
-                menuText += '\n';
-            }
+            menuText += '\n';
+        }
+    });
+    
+    // 返回菜单文本
+    return menuText;
+}
+
             
             // 使用现代Clipboard API
             if (navigator.clipboard) {
