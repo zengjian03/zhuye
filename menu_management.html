@@ -1376,7 +1376,7 @@
             const groupedMenu = {};
             myMenu.forEach(dish => {
                 if (!groupedMenu[dish.category]) {
-                    groupedMenu[dish.category] = [];
+                    groupedMenu[dish.category] =  ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
                 }
                 groupedMenu[dish.category].push(dish);
             });
