@@ -1368,43 +1368,73 @@
             performCopy();
         }
         
-        // 执行复制操作
-        function performCopy() {
-            // 定义分类顺序
+  // 执行复制操作（修改版：按指定分类排序）
+function performCopy() {
+    // 1. 定义分类优先级顺序
     const categoryOrder = ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
-            // 按分类分组
-            const groupedMenu = {};
-            myMenu.forEach(dish => {
-                if (!groupedMenu[dish.category]) {
-                    groupedMenu[dish.category] =  ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
-                }
-                groupedMenu[dish.category].push(dish);
-            });
-            
-            // 构建菜单文本
-            let menuText = "门店菜单\n\n";
-            for (const category in groupedMenu) {
-                menuText += `#${category}\n`;
-                groupedMenu[category].forEach((dish, index) => {
-                    menuText += `${index + 1}. ${dish.name}\n`;
-                });
-                menuText += '\n';
-            }
-            
-            // 使用现代Clipboard API
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(menuText)
-                    .then(() => {
-                        showNotification('菜单已复制到剪贴板', 'success');
-                    })
-                    .catch(err => {
-                        console.error('复制失败:', err);
-                        copyWithFallback(menuText);
-                    });
-            } else {
-                copyWithFallback(menuText);
-            }
+    
+    // 2. 按预设顺序对菜单进行排序
+    const sortedMenu = [...myMenu].sort((a, b) => {
+        const indexA = categoryOrder.indexOf(a.category);
+        const indexB = categoryOrder.indexOf(b.category);
+        
+        // 如果分类不在预设列表中，排到最后
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        
+        return indexA - indexB;
+    });
+
+    // 3. 构建菜单文本（现在是有序的）
+    let menuText = "门店菜单\n\n";
+    
+    // 使用一个对象来按分类收集菜品
+    const groupedMenu = {};
+    sortedMenu.forEach(dish => {
+        if (!groupedMenu[dish.category]) {
+            groupedMenu[dish.category] = [];
         }
+        groupedMenu[dish.category].push(dish);
+    });
+
+    // 按照预设的 categoryOrder 顺序输出文本
+    categoryOrder.forEach(category => {
+        if (groupedMenu[category] && groupedMenu[category].length > 0) {
+            menuText += `#${category}\n`;
+            groupedMenu[category].forEach((dish, index) => {
+                menuText += `${index + 1}. ${dish.name}\n`;
+            });
+            menuText += '\n'; // 分类之间空一行
+        }
+    });
+
+    // 4. 处理“其他”分类（如果有不在预设列表中的分类）
+    Object.keys(groupedMenu).forEach(category => {
+        if (!categoryOrder.includes(category)) {
+            menuText += `#${category}\n`;
+            groupedMenu[category].forEach((dish, index) => {
+                menuText += `${index + 1}. ${dish.name}\n`;
+            });
+            menuText += '\n';
+        }
+    });
+
+    // 使用现代Clipboard API
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(menuText)
+        .then(() => {
+            showNotification('菜单已复制到剪贴板', 'success');
+        })
+        .catch(err => {
+            console.error('复制失败:', err);
+            copyWithFallback(menuText);
+        });
+    } else {
+        copyWithFallback(menuText);
+    }
+}
+
         
         // 传统复制方法
         function copyWithFallback(text) {
