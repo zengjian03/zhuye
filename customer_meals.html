@@ -548,6 +548,57 @@
             transform: translateY(-3px);
         }
         
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .category-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .category-btn:hover {
+            background: var(--light-color);
+            border-color: var(--primary-color);
+        }
+        
+        .category-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .dish-name {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .dish-category {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .replace-dish:hover .dish-category {
+            opacity: 0.9;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -764,8 +815,17 @@
                 <h3 class="modal-title"><i class="fas fa-exchange-alt"></i> 选择替换菜品</h3>
                 <span class="close-modal">&times;</span>
             </div>
-            <div id="replace-dishes-container">
-                <!-- 替换菜品将通过JS动态生成 -->
+            <div class="modal-body">
+                <div class="category-filter">
+                    <button class="category-btn active" data-category="all">全部</button>
+                    <button class="category-btn" data-category="大荤">大荤</button>
+                    <button class="category-btn" data-category="荤菜">荤菜</button>
+                    <button class="category-btn" data-category="素菜">素菜</button>
+                    <button class="category-btn" data-category="蔬菜">蔬菜</button>
+                </div>
+                <div id="replace-dishes-container">
+                    <!-- 替换菜品将通过JS动态生成 -->
+                </div>
             </div>
         </div>
     </div>
@@ -820,6 +880,9 @@
         
         // 当前选中的分类
         let currentCategory = 'all';
+        
+        // 当前换菜模态框的分类
+        let currentReplaceCategory = 'all';
 		
         function loadFromLocalStorage() {
             const savedMenu = localStorage.getItem('porscheMenu');
@@ -868,7 +931,32 @@
             cancelAddBtn.addEventListener('click', hideAddForm);
             calculateBtn.addEventListener('click', calculateIngredients);
             copyResultsBtn.addEventListener('click', copyResults);
-            closeModalBtn.addEventListener('click', closeReplaceModal);
+            // 为所有关闭按钮添加事件监听器
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 检查是哪个模态框的关闭按钮
+                    const modal = this.closest('.modal');
+                    if (modal.id === 'replace-modal') {
+                        closeReplaceModal();
+                    } else if (modal.id === 'edit-modal') {
+                        closeEditModal();
+                    }
+                });
+            });
+            
+            // 为模态框背景添加点击事件，点击背景关闭模态框
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        if (this.id === 'replace-modal') {
+                            closeReplaceModal();
+                        } else if (this.id === 'edit-modal') {
+                            closeEditModal();
+                        }
+                    }
+                });
+            });
             addIngredientBtn.addEventListener('click', addIngredientRow);
             saveEditBtn.addEventListener('click', saveDishEdit);
             cancelEditBtn.addEventListener('click', closeEditModal);
@@ -1035,18 +1123,41 @@
         // 打开换菜模态框
         function openReplaceModal(index) {
             currentReplaceIndex = index;
+            currentReplaceCategory = 'all';
             replaceModal.style.display = 'flex';
             renderReplaceDishes();
+            
+            // 添加分类按钮事件监听器
+            const categoryBtns = replaceModal.querySelectorAll('.category-btn');
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    // 添加当前按钮的active类
+                    this.classList.add('active');
+                    // 更新当前分类
+                    currentReplaceCategory = this.dataset.category;
+                    // 重新渲染菜品
+                    renderReplaceDishes();
+                });
+            });
         }
         
         // 渲染替换菜品
         function renderReplaceDishes() {
             replaceDishesContainer.innerHTML = '';
             
-            dishes.forEach(dish => {
+            const filteredDishes = currentReplaceCategory === 'all' 
+                ? dishes 
+                : dishes.filter(dish => dish.category === currentReplaceCategory);
+            
+            filteredDishes.forEach(dish => {
                 const dishCard = document.createElement('div');
                 dishCard.className = 'replace-dish';
-                dishCard.innerHTML = dish.name;
+                dishCard.innerHTML = `
+                    <span class="dish-name">${dish.name}</span>
+                    <span class="dish-category">${dish.category}</span>
+                `;
                 dishCard.addEventListener('click', () => {
                     replaceDish(dish);
                 });
