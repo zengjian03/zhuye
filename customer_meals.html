@@ -255,6 +255,33 @@
             border-color: var(--primary-color);
         }
         
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .category-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
         .dish-name {
             font-weight: 600;
             margin-bottom: 10px;
@@ -571,6 +598,14 @@
                     <input type="text" id="dish-search" placeholder="搜索菜品...">
                 </div>
                 
+                <div class="category-tabs">
+                    <button class="category-btn active" data-category="all">全部</button>
+                    <button class="category-btn" data-category="大荤">大荤</button>
+                    <button class="category-btn" data-category="蔬菜">蔬菜</button>
+                    <button class="category-btn" data-category="荤菜">荤菜</button>
+                    <button class="category-btn" data-category="素菜">素菜</button>
+                </div>
+                
                 <div class="dishes-grid" id="dishes-grid">
                     <!-- 菜品卡片将通过JS动态生成 -->
                 </div>
@@ -582,6 +617,15 @@
                 <div class="add-dish-form" id="add-dish-form">
                     <div class="form-group">
                         <input type="text" id="new-dish-name" placeholder="输入菜品名称">
+                    </div>
+                    <div class="form-group">
+                        <label>菜品分类</label>
+                        <select id="dish-category">
+                            <option value="大荤">大荤</option>
+                            <option value="蔬菜">蔬菜</option>
+                            <option value="荤菜">荤菜</option>
+                            <option value="素菜">素菜</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>配料信息</label>
@@ -686,6 +730,16 @@
                 </div>
                 
                 <div class="form-group">
+                    <label>菜品分类</label>
+                    <select id="edit-dish-category">
+                        <option value="大荤">大荤</option>
+                        <option value="蔬菜">蔬菜</option>
+                        <option value="荤菜">荤菜</option>
+                        <option value="素菜">素菜</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
                     <label>配料信息</label>
                     <div id="edit-ingredients-container">
                         <!-- 编辑配料将通过JS动态生成 -->
@@ -763,6 +817,9 @@
         
         // 当前替换的菜品索引
         let currentReplaceIndex = null;
+        
+        // 当前选中的分类
+        let currentCategory = 'all';
 		
         function loadFromLocalStorage() {
             const savedMenu = localStorage.getItem('porscheMenu');
@@ -816,6 +873,20 @@
             saveEditBtn.addEventListener('click', saveDishEdit);
             cancelEditBtn.addEventListener('click', closeEditModal);
             addEditIngredientBtn.addEventListener('click', addEditIngredientRow);
+            
+            // 分类按钮事件监听器
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    // 添加当前按钮的active类
+                    this.classList.add('active');
+                    // 更新当前分类
+                    currentCategory = this.dataset.category;
+                    // 重新过滤菜品
+                    filterDishes();
+                });
+            });
        // 添加份数和备注变化的监听器
             minhangQuantity.addEventListener('change', saveToLocalStorage);
             xuhuiQuantity.addEventListener('change', saveToLocalStorage);
@@ -865,6 +936,7 @@
                 dishCard.className = 'dish-card';
                 dishCard.innerHTML = `
                     <div class="dish-name">${dish.name}</div>
+                    <div class="dish-category" style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">分类: ${dish.category || '未分类'}</div>
                     <div class="dish-actions">
                         <button class="btn add-btn" onclick="addToMenu('${dish.name}')">
                             <i class="fas fa-plus"></i> 添加
@@ -884,14 +956,22 @@
         // 过滤菜品
         function filterDishes() {
             const searchTerm = dishSearch.value.toLowerCase();
-            if (searchTerm === '') {
-                renderDishes(dishes);
-                return;
+            
+            let filteredDishes = dishes;
+            
+            // 分类过滤
+            if (currentCategory !== 'all') {
+                filteredDishes = filteredDishes.filter(dish => 
+                    dish.category === currentCategory
+                );
             }
             
-            const filteredDishes = dishes.filter(dish => 
-                dish.name.toLowerCase().includes(searchTerm)
-            );
+            // 搜索过滤
+            if (searchTerm !== '') {
+                filteredDishes = filteredDishes.filter(dish => 
+                    dish.name.toLowerCase().includes(searchTerm)
+                );
+            }
             
             renderDishes(filteredDishes);
         }
@@ -1322,7 +1402,8 @@
             // 创建新菜品
             const newDish = {
                 name: dishName,
-                ingredients: ingredients
+                ingredients: ingredients,
+                category: document.getElementById('dish-category').value
             };
             
             dishes.push(newDish);
@@ -1342,6 +1423,7 @@
             
             // 填充表单
             editDishNameInput.value = dish.name;
+            document.getElementById('edit-dish-category').value = dish.category || '大荤';
             
             // 清空编辑配料容器
             editIngredientsContainer.innerHTML = '';
@@ -1430,6 +1512,7 @@
             // 更新菜品库中的菜品
             currentEditDish.name = newName;
             currentEditDish.ingredients = ingredients;
+            currentEditDish.category = document.getElementById('edit-dish-category').value;
             
             // 更新菜单中同名的菜品
             myMenu.forEach(item => {
