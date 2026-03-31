@@ -1,7 +1,7 @@
 {
     "version": "1.1.0",
     "versionCode": 2,
-	"forced":"0",
+	"forced":"1",
     "downloadUrl": "https://your-server.com/app-release.apk",
     "message": "修复了一些已知问题\n添加了新功能"
 }
