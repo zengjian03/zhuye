@@ -2,6 +2,6 @@
     "version": "1.1.0",
     "versionCode": 2,
 	"forced":"0",
-    "downloadUrl": "https://wget.la/https://raw.githubusercontent.com/zengjian03/zhuye/master/release.apk",
+    "downloadUrl": "https://wget.la/https://raw.githubusercontent.com/zengjian03/zhuye/master/app-release.apk",
     "message": "修复了一些已知问题\n添加了新功能"
 }
