@@ -106,7 +106,7 @@
             box-shadow: var(--shadow);
             padding: 15px;
             overflow-y: auto;
-            max-height: calc(100vh - 250px);
+            max-height: calc(100vh - 400px);
         }
         
         .menu-list h2 {
@@ -121,7 +121,7 @@
         }
         
         .dish-item {
-            padding: 8px;
+            padding: 4px;
             border-bottom: 1px solid #eee;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -143,11 +143,11 @@
             background-color: var(--success-color);
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
+            border-radius: 2px;
+            padding: 2px 2px;
             font-size: 0.8rem;
             cursor: pointer;
-            margin-left: 10px;
+            margin-left: 2px;
             transition: all 0.3s;
         }
         
@@ -156,12 +156,12 @@
         }
         
         .add-dish-form {
-            margin: 10px 0;
-            padding: 10px;
+            margin: 5px 0;
+            padding: 5px;
             background-color: #f8f9fa;
             border-radius: 5px;
             display: flex;
-            gap: 10px;
+            gap: 5px;
         }
         
         .new-dish-input {
@@ -171,15 +171,7 @@
             border-radius: 4px;
         }
         
-        .add-dish-submit {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 0 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+
         
         .add-dish-submit:hover {
             background-color: #0069d9;
@@ -206,7 +198,7 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            min-height: 300px;
+            min-height: 540px;
             display: none;
         }
         
@@ -246,7 +238,7 @@
         
         .btn {
             flex: 1;
-            min-width: 100px;
+            min-width: 80px;
             padding: 8px 12px;
             border: none;
             border-radius: var(--border-radius);
@@ -311,7 +303,7 @@
         }
         
         /* 响应式设计 */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .main-content {
                       flex-direction: row;
                 flex-wrap: nowrap;
@@ -320,11 +312,11 @@
             
             .menu-list,
             .editor-section {
-                min-width: 120px;
-                max-height: calc(100vh - 200px);
+                min-width: 20px;
+                max-height: calc(100vh - 300px);
             }
             .editor-section {
-                min-width: 300px;
+                min-width: 200px;
                 flex: 1;
             }
             .nav-buttons {
