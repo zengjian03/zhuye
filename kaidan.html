@@ -609,9 +609,7 @@
                         const textarea = document.createElement('textarea');
                         textarea.value = combinedContent;
                         document.body.appendChild(textarea);
-                        textarea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textarea);
+                        
                         alert('内容已复制到剪贴板');
                     });
             }
