@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JSON 极简编辑器</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #1a1a1a;
+            --text-sub: #666666;
+            --border-color: #e5e5e5;
+            --accent-color: #000000;
+            --hover-bg: #f5f5f5;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部极简导航 */
+        header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            z-index: 10;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: var(--text-sub);
+            font-family: var(--font-mono);
+            margin-left: 10px;
+            padding: 4px 8px;
+            background: var(--hover-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-sans);
+        }
+
+        .btn:hover {
+            border-color: var(--accent-color);
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+        .btn-primary:hover {
+            opacity: 0.8;
+            background: #333;
+        }
+
+        /* 面包屑 */
+        .breadcrumbs {
+            padding: 15px 30px;
+            font-size: 12px;
+            color: var(--text-sub);
+            border-bottom: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .crumb { cursor: pointer; }
+        .crumb:hover { color: var(--accent-color); text-decoration: underline; }
+
+        /* 列表区域 */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .list-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .drag-handle {
+            cursor: grab;
+            color: #ccc;
+            padding: 0 15px;
+            font-size: 16px;
+            visibility: hidden;
+        }
+        .list-item:hover .drag-handle { visibility: visible; }
+
+        .item-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .key-label {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 500;
+            min-width: 150px;
+            color: var(--text-main);
+        }
+
+        .value-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--text-sub);
+            padding: 5px 0;
+        }
+        .value-input:focus {
+            color: var(--accent-color);
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .list-item:hover .item-actions { opacity: 1; }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-sub);
+            font-size: 12px;
+        }
+        .icon-btn:hover { color: var(--accent-color); }
+
+        /* 底部工具栏 */
+        .bottom-bar {
+            padding: 20px 30px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+        }
+
+        .status-indicator {
+            font-size: 12px;
+            color: var(--text-sub);
+            font-family: var(--font-mono);
+        }
+        .status-indicator.saving { color: #f39c12; }
+        .status-indicator.saved { color: #27ae60; }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            header, .main-content, .bottom-bar { padding-left: 20px; padding-right: 20px; }
+            .item-content { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .key-label { min-width: auto; }
+            .value-input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>
+            JSON EDITOR
+            <span id="fileName" class="file-info">未命名.json</span>
+        </h1>
+        <div class="actions">
+            <button class="btn" onclick="triggerOpen()">打开</button>
+            <button class="btn btn-primary" onclick="saveFile(true)">保存</button>
+        </div>
+    </header>
+
+    <input type="file" id="fileInput" style="display: none;" accept=".json" onchange="handleFileSelect(this)">
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <span class="crumb">root</span>
+    </div>
+
+    <div class="main-content" id="editor-area">
+        <!-- 列表项将在这里生成 -->
+    </div>
+
+    <div class="bottom-bar">
+        <button class="btn" onclick="addChild()">+ 添加字段</button>
+        <div class="status-indicator" id="status">就绪</div>
+    </div>
+
+    <script>
+        let jsonData = {};
+        let currentPath = [];
+        let fileHandle = null;
+        let fileName = "data.json";
+        let saveTimer = null;
+
+        // --- 核心逻辑：文件操作 ---
+        function triggerOpen() {
+            if ('showOpenFilePicker' in window) {
+                showOpenFilePicker({ types: [{ accept: { 'application/json': ['.json'] } }] })
+                .then(handles => { fileHandle = handles[0]; loadFile(fileHandle); })
+                .catch(err => { if (err.name !== 'AbortError') document.getElementById('fileInput').click(); });
+            } else {
+                document.getElementById('fileInput').click();
+            }
+        }
+
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (file) {
+                fileName = file.name;
+                document.getElementById('fileName').textContent = fileName;
+                const reader = new FileReader();
+                reader.onload = e => { loadJSON(e.target.result); };
+                reader.readAsText(file);
+                input.value = '';
+            }
+        }
+
+        async function loadFile(handle) {
+            const file = await handle.getFile();
+            fileName = file.name;
+            document.getElementById('fileName').textContent = fileName;
+            const text = await file.text();
+            loadJSON(text);
+        }
+
+        function loadJSON(text) {
+            try {
+                jsonData = JSON.parse(text);
+                currentPath = [];
+                renderEditor();
+                updateStatus("加载成功", "saved");
+            } catch (e) {
+                alert("JSON 格式错误");
+            }
+        }
+
+        // --- 核心逻辑：自动保存 ---
+
+
+        async function performSave() {
+            const jsonStr = JSON.stringify(jsonData, null, 4);
+            if (fileHandle && 'createWritable' in fileHandle) {
+                try {
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(jsonStr);
+                    await writable.close();
+                    updateStatus("已保存到磁盘", "saved");
+                    return;
+                } catch (e) { console.error(e); }
+            }
+            // 降级方案
+            updateStatus("已复制到剪贴板", "saved");
+            try { await navigator.clipboard.writeText(jsonStr); } catch(e){}
+        }
+
+        function saveFile(force) {
+            if (saveTimer) clearTimeout(saveTimer);
+            performSave();
+        }
+
+        function updateStatus(msg, type) {
+            const el = document.getElementById('status');
+            el.textContent = msg;
+            el.className = 'status-indicator ' + type;
+        }
+
+        // --- 核心逻辑：渲染 ---
+        function renderEditor() {
+            const container = document.getElementById('editor-area');
+            container.innerHTML = '';
+            updateBreadcrumbs();
+
+            let currentData = jsonData;
+            for (let key of currentPath) { if(currentData) currentData = currentData[key]; }
+
+            if (!currentData) { container.innerHTML = '<div style="padding:20px; color:#999;">空数据</div>'; return; }
+
+            // 渲染对象或数组
+            const keys = Array.isArray(currentData) ? currentData.map((_, i) => i) : Object.keys(currentData);
+            
+            keys.forEach(key => {
+                const val = currentData[key];
+                const isComplex = (typeof val === 'object' && val !== null);
+                const displayKey = Array.isArray(currentData) ? `[${key}]` : key;
+                
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.draggable = true;
+                item.dataset.path = JSON.stringify(currentPath);
+                item.dataset.key = key;
+
+                item.innerHTML = `
+                    <div class="drag-handle">⋮⋮</div>
+                    <div class="item-content">
+                        <div class="key-label">${displayKey}</div>
+                        ${isComplex 
+                            ? `<div style="color:#999; font-size:12px; font-family:monospace;">${Array.isArray(val) ? 'Array['+val.length+']' : 'Object{...}'}</div>`
+                            : `<input type="text" class="value-input" value="${val}" oninput="onInputChange('${key}', this.value)">`
+                        }
+                    </div>
+                    <div class="item-actions">
+                        ${isComplex ? `<button class="icon-btn" onclick="enterPath('${key}')">进入 →</button>` : ''}
+                        <button class="icon-btn" style="color:#e74c3c" onclick="deleteItem('${key}')">删除</button>
+                    </div>
+                `;
+                
+                addDragEvents(item);
+                container.appendChild(item);
+            });
+        }
+
+        // --- 核心逻辑：数据修改 ---
+        function onInputChange(key, newVal) {
+            let target = jsonData;
+            for (let k of currentPath) target = target[k];
+            
+            // 智能类型
+            if (!isNaN(newVal) && newVal !== '') target[key] = Number(newVal);
+            else if (newVal === 'true') target[key] = true;
+            else if (newVal === 'false') target[key] = false;
+            else target[key] = newVal;
+            
+            triggerAutoSave();
+        }
+
+        function addChild() {
+            let currentData = jsonData;
+            for (let key of currentPath) currentData = currentData[key];
+
+            if (typeof currentData === 'object' && !Array.isArray(currentData)) {
+                const key = prompt("字段名:");
+                if (key) { currentData[key] = ""; renderEditor(); triggerAutoSave(); }
+            } else if (Array.isArray(currentData)) {
+                currentData.push("新项");
+                renderEditor(); triggerAutoSave();
+            }
+        }
+
+        function deleteItem(key) {
+            if(!confirm('删除?')) return;
+            let target = jsonData;
+            for (let k of currentPath) target = target[k];
+            if (Array.isArray(target)) target.splice(parseInt(key), 1);
+            else delete target[key];
+            renderEditor(); triggerAutoSave();
+        }
+
+        function enterPath(key) { currentPath.push(key); renderEditor(); }
+        function goHome() { currentPath = []; renderEditor(); }
+        
+        function updateBreadcrumbs() {
+            const bc = document.getElementById('breadcrumbs');
+            bc.innerHTML = '<span class="crumb" onclick="goHome()">root</span>';
+            currentPath.forEach((p, i) => {
+                const slice = currentPath.slice(0, i + 1);
+                bc.innerHTML += ` / <span class="crumb" onclick="currentPath=${JSON.stringify(slice)}; renderEditor();">${p}</span>`;
+            });
+        }
+
+        // --- 拖拽逻辑 ---
+        let draggedItem = null;
+        function addDragEvents(card) {
+            card.addEventListener('dragstart', e => { draggedItem = card; card.style.opacity = '0.5'; });
+            card.addEventListener('dragend', e => { card.style.opacity = '1'; });
+            card.addEventListener('dragover', e => { e.preventDefault(); });
+            card.addEventListener('drop', e => {
+                e.preventDefault();
+                if (draggedItem !== card) {
+                    const path = JSON.parse(card.dataset.path);
+                    let target = jsonData;
+                    for (let k of path) target = target[k];
+                    
+                    const sKey = draggedItem.dataset.key;
+                    const tKey = card.dataset.key;
+
+                    if (Array.isArray(target)) {
+                        const sIdx = parseInt(sKey);
+                        const tIdx = parseInt(tKey);
+                        const item = target[sIdx];
+                        target.splice(sIdx, 1);
+                        target.splice(tIdx, 0, item);
+                        renderEditor();
+                        triggerAutoSave();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
