@@ -12,7 +12,7 @@
             box-sizing: border-box;
             font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
         }
-        
+
         body {
             background-color: #f5f5f5;
             color: #333;
@@ -21,7 +21,7 @@
             margin: 0;
             font-size: 14px;
         }
-        
+
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -29,8 +29,7 @@
             min-height: 100vh;
             position: relative;
         }
-        
-        /* 标题区域 */
+
         .header {
             padding: 15px;
             background: linear-gradient(135deg, #4a6fa5, #6b8cbc);
@@ -39,27 +38,26 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .header h1 {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 5px;
         }
-        
-        /* 筛选区域 */
+
         .filter-section {
             padding: 15px;
             background: white;
             border-bottom: 1px solid #eee;
         }
-        
+
         .category-filters {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 15px;
         }
-        
+
         .filter-tag {
             padding: 6px 12px;
             border-radius: 15px;
@@ -71,21 +69,21 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .filter-tag.active {
             background: #4a6fa5;
             color: white;
         }
-        
+
         .filter-tag:hover {
             transform: translateY(-2px);
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
+
         .search-box {
             position: relative;
         }
-        
+
         .search-box input {
             width: 100%;
             padding: 10px 15px 10px 40px;
@@ -95,13 +93,13 @@
             background: #f5f5f5;
             transition: all 0.3s ease;
         }
-        
+
         .search-box input:focus {
             background: white;
             border-color: #4a6fa5;
             box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
         }
-        
+
         .search-box i {
             position: absolute;
             left: 15px;
@@ -109,15 +107,14 @@
             transform: translateY(-50%);
             color: #999;
         }
-        
-        /* 主内容区 */
+
         .main-content {
             display: flex;
             padding: 10px;
             gap: 10px;
             height: calc(100vh - 200px);
         }
-        
+
         .menu-section, .dish-section {
             flex: 1;
             background: white;
@@ -127,7 +124,7 @@
             overflow-y: auto;
             transition: all 0.3s ease;
         }
-        
+
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -136,17 +133,17 @@
             padding-bottom: 5px;
             border-bottom: 1px solid #eee;
         }
-        
+
         .section-title {
             font-size: 16px;
             font-weight: 600;
         }
-        
+
         .section-actions {
             display: flex;
             gap: 5px;
-}
-        
+        }
+
         .action-btn {
             padding: 5px 10px;
             border-radius: 5px;
@@ -157,17 +154,16 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .action-btn:hover {
             background: #3a5a80;
             transform: translateY(-1px);
         }
-        
-        /* 菜品列表 */
+
         .dishes-list {
             padding: 5px 0;
         }
-        
+
         .dish-row {
             display: flex;
             padding: 10px;
@@ -175,15 +171,15 @@
             align-items: center;
             transition: background-color 0.2s;
         }
-        
+
         .dish-row:hover {
             background-color: #f9f9f9;
         }
-        
+
         .dish-row:last-child {
             border-bottom: none;
         }
-        
+
         .dish-number {
             width: 24px;
             height: 24px;
@@ -197,16 +193,16 @@
             margin-right: 12px;
             flex-shrink: 0;
         }
-        
+
         .dish-info {
             flex-grow: 1;
         }
-        
+
         .dish-name {
             font-size: 16px;
             margin-bottom: 3px;
         }
-        
+
         .dish-category {
             font-size: 12px;
             color: #6c757d;
@@ -215,12 +211,12 @@
             border-radius: 10px;
             display: inline-block;
         }
-        
+
         .dish-actions {
             display: flex;
             gap: 5px;
         }
-        
+
         .icon-btn {
             width: 28px;
             height: 28px;
@@ -232,29 +228,28 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .icon-btn:hover {
             transform: scale(1.1);
         }
-        
+
         .replace-btn {
             color: #ff7e5f;
         }
-        
+
         .edit-btn {
             color: #17a2b8;
         }
-        
+
         .delete-btn {
             color: #dc3545;
         }
-        
+
         .drag-handle {
             cursor: move;
             color: #6c757d;
         }
-        
-        /* 菜库列表 */
+
         .dish-item {
             display: flex;
             padding: 10px;
@@ -262,24 +257,24 @@
             align-items: center;
             transition: background-color 0.2s;
         }
-        
+
         .dish-item:hover {
             background-color: #f9f9f9;
         }
-        
+
         .dish-item:last-child {
             border-bottom: none;
         }
-        
+
         .dish-item-info {
             flex-grow: 1;
         }
-        
+
         .dish-item-name {
             font-size: 16px;
             margin-bottom: 3px;
         }
-        
+
         .dish-item-category {
             font-size: 12px;
             color: #6c757d;
@@ -288,8 +283,7 @@
             border-radius: 10px;
             display: inline-block;
         }
-        
-        /* 底部操作栏 */
+
         .bottom-actions {
             position: fixed;
             bottom: 0;
@@ -298,11 +292,12 @@
             background: white;
             padding: 10px 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 15px;
             border-top: 1px solid #eee;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
-        
+
         .main-action-btn {
             padding: 12px 20px;
             border-radius: 20px;
@@ -315,78 +310,41 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .main-action-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        
-        .save-btn {
-            background: #28a745;
-            color: white;
-        }
-        
-        .import-btn {
-            background: #17a2b8;
-            color: white;
-        }
-        
-        .export-btn {
-            background: #6f42c1;
-            color: white;
-        }
-        
-        .copy-btn {
-            background: #fd7e14;
-            color: white;
-        }
-        
-        /* 响应式调整 */
+
+        .copy-btn { background: #fd7e14; color: white; }
+        .import-btn { background: #17a2b8; color: white; }
+        .export-btn { background: #6f42c1; color: white; }
+
         @media (max-width: 480px) {
             .main-content {
                 flex-direction: column;
                 height: auto;
             }
-            
             .menu-section, .dish-section {
                 min-height: 300px;
             }
-            
-            .dish-name {
-                font-size: 14px;
-            }
-            
+            .dish-name { font-size: 14px; }
             .main-action-btn {
                 padding: 10px 15px;
                 font-size: 13px;
             }
-            
-            .dish-actions {
-                gap: 3px;
-            }
-            
-            .icon-btn {
-                width: 24px;
-                height: 24px;
-            }
         }
-        
-        /* 拖拽样式 */
+
         .dragging {
             opacity: 0.7;
             background-color: #e0f7fa;
         }
-        
         .drag-over {
             border-top: 2px solid #4a6fa5;
         }
-        
-        /* 焦点状态 */
         .section-focus {
             border: 2px solid #4a6fa5;
         }
-        
-        /* 排序按钮样式 */
         .sort-btn {
             padding: 5px 8px;
             background: #4a6fa5;
@@ -397,12 +355,7 @@
             font-size: 12px;
             transition: all 0.2s ease;
         }
-        
-        .sort-btn:hover {
-            background: #3a5a80;
-        }
-        
-        /* 替换提示 */
+        .sort-btn:hover { background: #3a5a80; }
         .replace-hint {
             font-size: 12px;
             color: #ff7e5f;
@@ -413,21 +366,17 @@
             background: #fff8f6;
             border-radius: 5px;
         }
-        
-        /* 模态框样式 */
+
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0,0,0,0.5);
             z-index: 1000;
             align-items: center;
             justify-content: center;
         }
-        
         .modal-content {
             background: white;
             border-radius: 10px;
@@ -436,12 +385,10 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             animation: modalAppear 0.3s ease-out;
         }
-        
         @keyframes modalAppear {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        
         .modal-header {
             padding: 15px;
             background: linear-gradient(135deg, #4a6fa5, #6b8cbc);
@@ -451,35 +398,20 @@
             justify-content: space-between;
             align-items: center;
         }
-        
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        
+        .modal-title { font-size: 18px; font-weight: 600; }
         .close-btn {
             background: none;
             border: none;
             color: white;
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
-        
-        .close-btn:hover {
-            transform: scale(1.2);
-        }
-        
-        .modal-body {
-            padding: 20px;
-        }
-        
+        .modal-body { padding: 20px; }
         .modal-footer {
             padding: 15px;
             text-align: right;
             border-top: 1px solid #eee;
         }
-        
         .modal-btn {
             padding: 8px 15px;
             border-radius: 5px;
@@ -487,58 +419,10 @@
             cursor: pointer;
             font-size: 14px;
             margin-left: 10px;
-            transition: all 0.2s ease;
         }
-        
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .btn-primary {
-            background: #4a6fa5;
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .import-export-options {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-}
-        
-        .option-card {
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .option-card:hover {
-            border-color: #4a6fa5;
-            background: #f8f9ff;
-        }
-        
-        .option-card h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .option-card p {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        /* 通知样式 */
+        .btn-primary { background: #4a6fa5; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+
         .notification {
             position: fixed;
             top: 20px;
@@ -555,121 +439,36 @@
             z-index: 2000;
             animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
         }
-        
         @keyframes slideIn {
             from { top: -50px; opacity: 0; }
             to { top: 20px; opacity: 1; }
         }
-        
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
         }
-        
-        .notification.success {
-            background: #28a745;
-        }
-        
-        .notification.warning {
-            background: #fd7e14;
-        }
-        
-        .notification.error {
-            background: #dc3545;
-        }
-        
-        /* 文件导入区域 */
-        .file-drop-area {
-            border: 2px dashed #4a6fa5;
-            border-radius: 10px;
-            padding: 30px 20px;
-            text-align: center;
-            transition: all 0.2s;
-            background: #f8f9ff;
-        }
-        
-        .file-drop-area.active {
-            background: #e6f0ff;
-            border-color: #ff7e5f;
-        }
-        
-        .file-drop-area i {
-            font-size: 36px;
-            color: #4a6fa5;
-            margin-bottom: 10px;
-        }
-        
-        .file-drop-area p {
-            margin: 10px 0;
-            color: #666;
-        }
-        
-        .browse-btn {
-            color: #4a6fa5;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
-        /* 添加菜品模态框特定样式 */
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #333;
-        }
-        
+        .notification.success { background: #28a745; }
+        .notification.warning { background: #fd7e14; }
+        .notification.error { background: #dc3545; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 5px; font-weight: 500; }
         .form-control {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
-            transition: border-color 0.2s;
         }
-        
-        .form-control:focus {
-            border-color: #4a6fa5;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
-        }
-        
-        .required:after {
-            content: " *";
-            color: #dc3545;
-        }
-        
-        /* 表单错误提示 */
-        .error-message {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 4px;
-            display: none;
-        }
-        
-        .empty-message {
-            text-align: center;
-            padding: 20px;
-            color: #999;
-            font-style: italic;
-        }
-        
-        /* 修复问题1: 分类分组样式 */
+        .required:after { content: " *"; color: #dc3545; }
+        .error-message { color: #dc3545; font-size: 12px; margin-top: 4px; display: none; }
+        .empty-message { text-align: center; padding: 20px; color: #999; font-style: italic; }
         .category-group {
             margin-bottom: 15px;
             border: 1px solid #eaeaea;
             border-radius: 8px;
             overflow: hidden;
         }
-        
         .category-header {
             background-color: #f0f2f5;
             padding: 10px 15px;
@@ -679,7 +478,6 @@
             align-items: center;
             gap: 8px;
         }
-        
         .category-count {
             background-color: #4a6fa5;
             color: white;
@@ -687,89 +485,21 @@
             padding: 2px 8px;
             font-size: 12px;
         }
-        
-        /* 确认删除模态框 */
-        .confirm-modal-content {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .confirm-icon {
-            font-size: 48px;
-            color: #dc3545;
-            margin: 15px 0;
-        }
-        
-        .confirm-message {
-            margin-bottom: 20px;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-        
-        .confirm-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        
-        .confirm-btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .confirm-btn.delete {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-        .confirm-btn.cancel {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        /* 新增：索引追踪提示 */
-        .index-info {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            color: #4a6fa5;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .debug-info {
-            position: absolute;
-            bottom: 70px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #666;
-            border: 1px solid #e0e0e0;
-            max-width: 300px;
-            display: none;
-        }
-        
-        .debug-info.active {
-            display: block;
-        }
+        .confirm-modal-content { text-align: center; padding: 20px; }
+        .confirm-icon { font-size: 48px; color: #dc3545; margin: 15px 0; }
+        .confirm-message { margin-bottom: 20px; font-size: 16px; line-height: 1.5; }
+        .confirm-buttons { display: flex; gap: 15px; justify-content: center; }
+        .confirm-btn { padding: 10px 20px; border-radius: 6px; font-weight: 500; cursor: pointer; }
+        .confirm-btn.delete { background-color: #dc3545; color: white; }
+        .confirm-btn.cancel { background-color: #6c757d; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 标题 -->
         <div class="header">
-            <h1 id="menu-title">荤菜8个</h1>
+            <h1 id="menu-title">全部菜单</h1>
         </div>
-        
-        <!-- 筛选区域 -->
+
         <div class="filter-section">
             <div class="category-filters">
                 <div class="filter-tag active" data-category="all">全部</div>
@@ -780,16 +510,13 @@
                 <div class="filter-tag" data-category="dessert">点心</div>
                 <div class="filter-tag" data-category="cold">凉菜</div>
             </div>
-            
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="请输入搜索的菜名！" id="search-input">
             </div>
         </div>
-        
-        <!-- 主内容区 -->
+
         <div class="main-content">
-            <!-- 菜单列表 -->
             <div class="menu-section" id="menu-section">
                 <div class="section-header">
                     <div class="section-title">我的菜单</div>
@@ -798,14 +525,10 @@
                         <button class="sort-btn" id="sort-desc"><i class="fas fa-sort-alpha-down-alt"></i></button>
                     </div>
                 </div>
-                
-                <div class="dishes-list" id="menu-list">
-                    <!-- 菜单项将通过JS动态生成 -->
-                </div>
+                <div class="dishes-list" id="menu-list"></div>
                 <div class="replace-hint" id="replace-hint">点击右侧菜品进行替换</div>
             </div>
-            
-            <!-- 菜库列表 -->
+
             <div class="dish-section" id="dish-section">
                 <div class="section-header">
                     <div class="section-title">菜品库</div>
@@ -813,17 +536,10 @@
                         <button class="action-btn" id="add-dish">添加</button>
                     </div>
                 </div>
-                
-                <div class="dishes-list" id="dish-list">
-                    <!-- 菜库项将通过JS动态生成 -->
-                </div>
+                <div class="dishes-list" id="dish-list"></div>
             </div>
         </div>
-        
-        <!-- 调试信息 -->
-        <div class="debug-info" id="debug-info"></div>
-        
-        <!-- 底部操作栏 -->
+
         <div class="bottom-actions">
             <button class="main-action-btn copy-btn" id="copy-menu">
                 <i class="fas fa-copy"></i> 复制菜单
@@ -836,30 +552,8 @@
             </button>
         </div>
     </div>
-    
-    <!-- 导入/导出模态框 -->
-    <div class="modal" id="import-export-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="modal-title">导入菜库</div>
-                <button class="close-btn" id="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="file-drop-area" id="file-drop-area">
-                    <i class="fas fa-file-upload"></i>
-                    <p>拖拽文件到此处或<span class="browse-btn">浏览文件</span></p>
-                    <p id="file-name">未选择文件</p>
-                    <input type="file" class="file-input" id="file-input" accept=".json">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn btn-secondary" id="cancel-btn">取消</button>
-                <button class="modal-btn btn-primary" id="action-btn">导入</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 添加菜品模态框 -->
+
+    <!-- 添加/编辑菜品模态框 -->
     <div class="modal" id="add-dish-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -898,7 +592,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 删除确认模态框 -->
     <div class="modal" id="delete-confirm-modal">
         <div class="modal-content">
@@ -923,27 +617,21 @@
     </div>
 
     <script>
-        // 数据存储
         let myMenu = [];
         let dishLibrary = [];
         let currentReplacingDishIndex = null;
         let currentCategory = "all";
-        let originalMenuOrder = [];
-        let currentModalAction = '';
         let currentSearchTerm = '';
         let dishToDeleteIndex = null;
         let currentEditingDishIndex = null;
-        
-        // 初始化数据
+
         function initData() {
-            // 从localStorage加载数据
             const savedMenu = localStorage.getItem('myMenu');
             const savedDishLibrary = localStorage.getItem('dishLibrary');
-            
+
             if (savedMenu) {
                 myMenu = JSON.parse(savedMenu);
             } else {
-                // 默认菜单数据
                 myMenu = [
                     { name: "韭菜炒田螺", category: "荤菜" },
                     { name: "蒜蓉西兰花", category: "素菜" },
@@ -953,11 +641,10 @@
                     { name: "白灼虾", category: "荤菜" }
                 ];
             }
-            
+
             if (savedDishLibrary) {
                 dishLibrary = JSON.parse(savedDishLibrary);
             } else {
-                // 默认菜库数据
                 dishLibrary = [
                     { name: "蒸蛋羹", category: "蒸菜" },
                     { name: "凉拌海带丝", category: "凉菜" },
@@ -969,914 +656,455 @@
                     { name: "地三鲜", category: "素菜" }
                 ];
             }
-            
-            // 保存原始顺序
-            originalMenuOrder = [...myMenu];
-            
+
             renderMenu();
             renderDishLibrary();
             updateMenuTitle();
         }
-        
-        // 渲染菜单 - 修复分类显示问题
+
         function renderMenu() {
             const menuList = document.getElementById('menu-list');
             menuList.innerHTML = '';
-            
-            // 根据当前分类筛选菜单
-            let filteredMenu = myMenu;
-  
-            // 根据分类筛选 - 修复：始终使用当前分类
+
+            let filteredMenu = [...myMenu];
             if (currentCategory !== 'all') {
                 filteredMenu = filteredMenu.filter(dish => dish.category === currentCategory);
             }
-            
+
             if (filteredMenu.length === 0) {
-                const emptyMessage = document.createElement('div');
-                emptyMessage.className = 'empty-message';
-                emptyMessage.textContent = '当前分类没有菜品，请从右侧菜库添加';
-                menuList.appendChild(emptyMessage);
+                menuList.innerHTML = '<div class="empty-message">当前分类没有菜品，请从右侧菜库添加</div>';
                 return;
             }
-            
-            // 在"全部"分类下按菜品分类分组显示
+
             if (currentCategory === 'all') {
-                // 按分类分组
-                const groupedByCategory = {};
-                
-                // 构建分组
+                const grouped = {};
                 filteredMenu.forEach(dish => {
-                    if (!groupedByCategory[dish.category]) {
-                        groupedByCategory[dish.category] = [];
-                    }
-                    groupedByCategory[dish.category].push(dish);
+                    if (!grouped[dish.category]) grouped[dish.category] = [];
+                    grouped[dish.category].push(dish);
                 });
-                
-                // 获取分类列表并按名称排序
-                const categories = Object.keys(groupedByCategory).sort();
-                
-                // 渲染每个分类组
-                categories.forEach(category => {
-                    const categoryGroup = document.createElement('div');
-                    categoryGroup.className = 'category-group';
-                    
-                    // 分类标题
-                    const categoryHeader = document.createElement('div');
-                    categoryHeader.className = 'category-header';
-                    categoryHeader.innerHTML = `
-                        ${category}
-                        <span class="category-count">${groupedByCategory[category].length}个</span>
-                    `;
-                    categoryGroup.appendChild(categoryHeader);
-                    
-                    // 分类下的菜品
-                    const categoryDishes = document.createElement('div');
-                    categoryDishes.className = 'dishes-list';
-                    
-                    groupedByCategory[category].forEach((dish, index) => {
-                        // 查找在原始菜单数组中的索引
-                        const globalIndex = myMenu.findIndex(item => item.name === dish.name);
-                        const dishRow = createDishRow(dish, index + 1, globalIndex);
-                        categoryDishes.appendChild(dishRow);
+                const categories = Object.keys(grouped).sort();
+                categories.forEach(cat => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'category-group';
+                    groupDiv.innerHTML = `<div class="category-header">${cat} <span class="category-count">${grouped[cat].length}个</span></div>`;
+                    const dishDiv = document.createElement('div');
+                    dishDiv.className = 'dishes-list';
+                    grouped[cat].forEach((dish, idx) => {
+                        const globalIdx = myMenu.findIndex(d => d.name === dish.name);
+                        dishDiv.appendChild(createDishRow(dish, idx+1, globalIdx));
                     });
-                    
-                    categoryGroup.appendChild(categoryDishes);
-                    menuList.appendChild(categoryGroup);
+                    groupDiv.appendChild(dishDiv);
+                    menuList.appendChild(groupDiv);
                 });
             } else {
-                // 非"全部"分类下平铺显示
-                filteredMenu.forEach((dish, index) => {
-                    // 查找在原始菜单数组中的索引
-                    const globalIndex = myMenu.findIndex(item => item.name === dish.name);
-                    const dishRow = createDishRow(dish, index + 1, globalIndex);
-                    menuList.appendChild(dishRow);
+                filteredMenu.forEach((dish, idx) => {
+                    const globalIdx = myMenu.findIndex(d => d.name === dish.name);
+                    menuList.appendChild(createDishRow(dish, idx+1, globalIdx));
                 });
             }
-            
             updateMenuTitle();
         }
-        
-        // 创建菜品行元素 - 修复：添加全局索引参数
+
         function createDishRow(dish, displayNumber, globalIndex) {
-            const dishRow = document.createElement('div');
-            dishRow.className = 'dish-row';
-            dishRow.dataset.name = dish.name;
-            dishRow.dataset.globalIndex = globalIndex; // 存储全局索引
-            dishRow.draggable = true;
-            
-            // 高亮搜索词
-            let displayName = dish.name;
-            let displayCategory = dish.category;
-            
+            const row = document.createElement('div');
+            row.className = 'dish-row';
+            row.dataset.name = dish.name;
+            row.dataset.globalIndex = globalIndex;
+            row.draggable = true;
+
+            let nameHtml = dish.name;
+            let catHtml = dish.category;
             if (currentSearchTerm) {
                 const regex = new RegExp(currentSearchTerm, 'gi');
-                displayName = dish.name.replace(regex, match => `<span class="highlight">${match}</span>`);
-                displayCategory = dish.category.replace(regex, match => `<span class="highlight">${match}</span>`);
+                nameHtml = dish.name.replace(regex, m => `<span class="highlight">${m}</span>`);
+                catHtml = dish.category.replace(regex, m => `<span class="highlight">${m}</span>`);
             }
-            
-            dishRow.innerHTML = `
+
+            row.innerHTML = `
                 <div class="dish-number">${displayNumber}</div>
                 <div class="dish-info">
-                    <div class="dish-name">${displayName}</div>
-                    <div class="dish-category">${displayCategory}</div>
+                    <div class="dish-name">${nameHtml}</div>
+                    <div class="dish-category">${catHtml}</div>
                 </div>
                 <div class="dish-actions">
-                    <div class="icon-btn replace-btn" title="换菜" onclick="startReplace(${globalIndex})">
-                        <i class="fas fa-exchange-alt"></i>
-                    </div>
-                    <div class="icon-btn delete-btn" title="删除" onclick="removeFromMenu(${globalIndex})">
-                        <i class="fas fa-trash"></i>
-                    </div>
-                    <div class="icon-btn drag-handle" title="拖动排序">
-                        <i class="fas fa-grip-vertical"></i>
-                    </div>
+                    <div class="icon-btn replace-btn" title="换菜" onclick="startReplace(${globalIndex})"><i class="fas fa-exchange-alt"></i></div>
+                    <div class="icon-btn delete-btn" title="删除" onclick="removeFromMenu(${globalIndex})"><i class="fas fa-trash"></i></div>
+                    <div class="icon-btn drag-handle" title="拖动排序"><i class="fas fa-grip-vertical"></i></div>
                 </div>
             `;
-            
-            return dishRow;
+            return row;
         }
-        
-        // 更新菜单标题 - 修复标题显示
+
         function updateMenuTitle() {
-            let title = "";
-            let count = 0;
-            
-            if (currentCategory === 'all') {
-                count = myMenu.length;
-                title = `全部菜单 ${count}个`;
-            } else {
-                count = myMenu.filter(dish => dish.category === currentCategory).length;
-                title = `${currentCategory} ${count}个`;
-            }
-            
+            const count = currentCategory === 'all' ? myMenu.length : myMenu.filter(d => d.category === currentCategory).length;
+            const title = currentCategory === 'all' ? `全部菜单 ${count}个` : `${currentCategory} ${count}个`;
             document.getElementById('menu-title').textContent = title;
         }
-        
-        // 渲染菜库
+
         function renderDishLibrary() {
             const dishList = document.getElementById('dish-list');
             dishList.innerHTML = '';
-            
-            // 根据当前分类筛选菜库
-            let filteredDishes = dishLibrary;
-            
-            // 应用搜索过滤
+
+            let filtered = dishLibrary.map((dish, idx) => ({ dish, idx }));
             if (currentSearchTerm) {
-                filteredDishes = filteredDishes.filter(dish => 
-                    dish.name.toLowerCase().includes(currentSearchTerm) || 
-                    dish.category.toLowerCase().includes(currentSearchTerm)
-                );
-            }
-            
-            // 根据分类筛选
-            if (currentCategory !== 'all') {
-                filteredDishes = filteredDishes.filter(dish => dish.category === currentCategory);
-            }
-            
-            if (filteredDishes.length === 0) {
-                const emptyMessage = document.createElement('div');
-                emptyMessage.className = 'empty-message';
-                emptyMessage.textContent = '当前分类没有菜品';
-                dishList.appendChild(emptyMessage);
-                return;
-            }
-            
-            // 使用映射数组保留原始索引
-            let filteredWithIndex = dishLibrary.map((dish, index) => ({ dish, index }));
-            
-            // 应用搜索过滤
-            if (currentSearchTerm) {
-                filteredWithIndex = filteredWithIndex.filter(item => 
+                filtered = filtered.filter(item => 
                     item.dish.name.toLowerCase().includes(currentSearchTerm) || 
                     item.dish.category.toLowerCase().includes(currentSearchTerm)
                 );
             }
-            
-            // 根据分类筛选
             if (currentCategory !== 'all') {
-                filteredWithIndex = filteredWithIndex.filter(item => item.dish.category === currentCategory);
+                filtered = filtered.filter(item => item.dish.category === currentCategory);
             }
-            
-            filteredWithIndex.forEach((item) => {
+
+            if (filtered.length === 0) {
+                dishList.innerHTML = '<div class="empty-message">当前分类没有菜品</div>';
+                return;
+            }
+
+            filtered.forEach(item => {
                 const dish = item.dish;
-                const globalIndex = item.index;
-                
-                const dishItem = document.createElement('div');
-                dishItem.className = 'dish-item';
-                dishItem.dataset.name = dish.name;
-                
+                const globalIdx = item.idx;
                 const isReplacing = currentReplacingDishIndex !== null;
-                const actionText = isReplacing ? '替换' : '添加';
-                
-                // 高亮搜索词
-                let displayName = dish.name;
-                let displayCategory = dish.category;
-                
+                const div = document.createElement('div');
+                div.className = 'dish-item';
+                let nameHtml = dish.name;
+                let catHtml = dish.category;
                 if (currentSearchTerm) {
                     const regex = new RegExp(currentSearchTerm, 'gi');
-                    displayName = dish.name.replace(regex, match => `<span class="highlight">${match}</span>`);
-                    displayCategory = dish.category.replace(regex, match => `<span class="highlight">${match}</span>`);
+                    nameHtml = dish.name.replace(regex, m => `<span class="highlight">${m}</span>`);
+                    catHtml = dish.category.replace(regex, m => `<span class="highlight">${m}</span>`);
                 }
-                
-                dishItem.innerHTML = `
+                div.innerHTML = `
                     <div class="dish-item-info">
-                        <div class="dish-item-name">${displayName}</div>
-                        <div class="dish-item-category">${displayCategory}</div>
+                        <div class="dish-item-name">${nameHtml}</div>
+                        <div class="dish-item-category">${catHtml}</div>
                     </div>
                     <div class="dish-actions">
-                        <div class="icon-btn replace-btn" onclick="addToMenu(${globalIndex}, ${isReplacing})" title="${actionText}">
-                            <i class="fas ${isReplacing ? 'fa-exchange-alt' : 'fa-plus'}"></i>
+                        <div class="icon-btn replace-btn" onclick="addToMenu(${globalIdx}, ${isReplacing})" title="${isReplacing?'替换':'添加'}">
+                            <i class="fas ${isReplacing?'fa-exchange-alt':'fa-plus'}"></i>
                         </div>
-                        <div class="icon-btn edit-btn" title="编辑" onclick="editDish(${globalIndex})">
-                            <i class="fas fa-edit"></i>
-                        </div>
-                        <div class="icon-btn delete-btn" title="删除" onclick="showDeleteConfirm(${globalIndex})">
-                            <i class="fas fa-trash"></i>
-                        </div>
+                        <div class="icon-btn edit-btn" onclick="editDish(${globalIdx})"><i class="fas fa-edit"></i></div>
+                        <div class="icon-btn delete-btn" onclick="showDeleteConfirm(${globalIdx})"><i class="fas fa-trash"></i></div>
                     </div>
                 `;
-                
-                dishList.appendChild(dishItem);
+                dishList.appendChild(div);
             });
         }
-        
-        // 添加菜品功能 - 修复分类问题
-        function addToMenu(dishIndex, isReplaceMode = false) {
+
+        function addToMenu(dishIndex, isReplace) {
             const dish = dishLibrary[dishIndex];
             if (!dish) return;
-            
-            if (isReplaceMode) {
-                // 替换模式
-                if (currentReplacingDishIndex === null) return;
-                
-                // 检查索引是否有效
-                if (currentReplacingDishIndex < 0 || currentReplacingDishIndex >= myMenu.length) {
-                    showNotification('要替换的菜品不存在', 'error');
-                    return;
-                }
-                
-                // 替换菜品 - 保持原分类
-                myMenu[currentReplacingDishIndex] = {
-                    ...dish,
-                    category: myMenu[currentReplacingDishIndex].category
-                };
-                
-                // 退出替换模式
+            if (isReplace) {
+                if (currentReplacingDishIndex === null || currentReplacingDishIndex < 0 || currentReplacingDishIndex >= myMenu.length) return;
+                myMenu[currentReplacingDishIndex] = { ...dish, category: myMenu[currentReplacingDishIndex].category };
                 currentReplacingDishIndex = null;
                 document.getElementById('replace-hint').style.display = 'none';
-                
-                // 重新渲染菜单和菜库
                 renderMenu();
                 renderDishLibrary();
-                
-                // 保存数据
                 saveData();
-                
                 showNotification('菜品替换成功', 'success');
             } else {
-                // 添加模式
-                // 修复点：使用当前筛选的分类（如果设置了特定分类）
-                const categoryToUse = currentCategory === 'all' ? dish.category : currentCategory;
-                
-                // 检查是否已在菜单中
-                if (myMenu.some(item => item.name === dish.name)) {
+                const cat = currentCategory === 'all' ? dish.category : currentCategory;
+                if (myMenu.some(d => d.name === dish.name)) {
                     showNotification('该菜品已在菜单中', 'warning');
                     return;
                 }
-                
-                myMenu.push({
-                    name: dish.name,
-                    category: categoryToUse
-                });
-                
-                // 重新渲染菜单
+                myMenu.push({ name: dish.name, category: cat });
                 renderMenu();
                 saveData();
-                showNotification(`菜品已添加到${categoryToUse}分类`, 'success');
+                showNotification(`菜品已添加到${cat}分类`, 'success');
             }
         }
-        
-        // 从菜单中移除 - 修复：使用全局索引
+
         function removeFromMenu(globalIndex) {
             if (globalIndex < 0 || globalIndex >= myMenu.length) return;
-            
-            const dishName = myMenu[globalIndex].name;
-            const dishCategory = myMenu[globalIndex].category;
-            
-          
-          
+            const name = myMenu[globalIndex].name;
             myMenu.splice(globalIndex, 1);
             renderMenu();
             saveData();
-            showNotification(`"${dishName}" 已从菜单移除`, 'success');
+            showNotification(`"${name}" 已从菜单移除`, 'success');
         }
-        
-        // 开始替换
+
         function startReplace(globalIndex) {
             if (globalIndex < 0 || globalIndex >= myMenu.length) return;
-            
             currentReplacingDishIndex = globalIndex;
             document.getElementById('replace-hint').style.display = 'block';
             renderDishLibrary();
         }
-        
-        // 排序菜单
-        function sortMenu(ascending = true) {
-            myMenu.sort((a, b) => {
-                return ascending 
-                    ? a.name.localeCompare(b.name) 
-                    : b.name.localeCompare(a.name);
-            });
+
+        function sortMenu(asc) {
+            myMenu.sort((a,b) => asc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
             renderMenu();
             saveData();
         }
-        
-        // 编辑菜品
+
         function editDish(dishIndex) {
             const dish = dishLibrary[dishIndex];
             if (!dish) return;
-            
-            // 保存当前编辑的菜品索引
             currentEditingDishIndex = dishIndex;
-            
-            // 更新模态框标题
             document.getElementById('dish-modal-title').textContent = '编辑菜品';
             document.getElementById('confirm-add-btn').textContent = '保存';
-            
-            // 填充表单数据
             document.getElementById('new-dish-name').value = dish.name;
             document.getElementById('new-dish-category').value = dish.category;
-            
-            // 重置错误信息
-            document.querySelectorAll('.error-message').forEach(el => {
-                el.style.display = 'none';
-            });
-            
-            // 显示模态框
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
             document.getElementById('add-dish-modal').style.display = 'flex';
         }
-        
-        // 显示删除确认框
+
         function showDeleteConfirm(dishIndex) {
             const dish = dishLibrary[dishIndex];
             if (!dish) return;
-            
-            // 保存待删除菜品索引
             dishToDeleteIndex = dishIndex;
-            
-            // 设置菜品名称
             document.getElementById('delete-dish-name').textContent = dish.name;
-            
-            // 显示模态框
             document.getElementById('delete-confirm-modal').style.display = 'flex';
         }
-        
-        // 确认删除菜品
+
         function deleteDishFromLibrary() {
             if (dishToDeleteIndex === null) return;
-            
             const dish = dishLibrary[dishToDeleteIndex];
-            if (!dish) return;
-            
-            // 同时从菜库和菜单中删除
             dishLibrary.splice(dishToDeleteIndex, 1);
-            
-            // 从菜单中移除同名菜品
-            myMenu = myMenu.filter(item => item.name !== dish.name);
-            
-            // 重置变量
+            myMenu = myMenu.filter(d => d.name !== dish.name);
             dishToDeleteIndex = null;
-            
-            // 更新UI
             renderDishLibrary();
             renderMenu();
             saveData();
-            
-            // 关闭模态框
             document.getElementById('delete-confirm-modal').style.display = 'none';
-            
             showNotification('菜品已删除', 'success');
         }
-        
-        // 复制菜单
+
         function copyMenu() {
             if (myMenu.length === 0) {
                 showNotification('菜单为空，无法复制', 'warning');
                 return;
             }
-            
-            performCopy();
-        }
-        
-  // 执行复制操作（修改版：按指定分类排序）
-function performCopy() {
-    // 1. 定义分类优先级顺序
-    const categoryOrder = ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
-    
-    // 2. 按预设顺序对菜单进行排序
-    const sortedMenu = [...myMenu].sort((a, b) => {
-        const indexA = categoryOrder.indexOf(a.category);
-        const indexB = categoryOrder.indexOf(b.category);
-        
-        // 如果分类不在预设列表中，排到最后
-        if (indexA === -1 && indexB === -1) return 0;
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        
-        return indexA - indexB;
-    });
-
-    // 3. 构建菜单文本（现在是有序的）
-    let menuText = "门店菜单\n\n";
-    
-    // 使用一个对象来按分类收集菜品
-    const groupedMenu = {};
-    sortedMenu.forEach(dish => {
-        if (!groupedMenu[dish.category]) {
-            groupedMenu[dish.category] = [];
-        }
-        groupedMenu[dish.category].push(dish);
-    });
-
-    // 按照预设的 categoryOrder 顺序输出文本
-    categoryOrder.forEach(category => {
-        if (groupedMenu[category] && groupedMenu[category].length > 0) {
-            menuText += `#${category}\n`;
-            groupedMenu[category].forEach((dish, index) => {
-                menuText += `${index + 1}. ${dish.name}\n`;
+            const categoryOrder = ['荤菜', '素菜', '一份菜', '蒸菜', '点心', '凉菜'];
+            const sorted = [...myMenu].sort((a,b) => {
+                const ia = categoryOrder.indexOf(a.category);
+                const ib = categoryOrder.indexOf(b.category);
+                if (ia === -1 && ib === -1) return 0;
+                if (ia === -1) return 1;
+                if (ib === -1) return -1;
+                return ia - ib;
             });
-            menuText += '\n'; // 分类之间空一行
-        }
-    });
-
-    // 4. 处理“其他”分类（如果有不在预设列表中的分类）
-    Object.keys(groupedMenu).forEach(category => {
-        if (!categoryOrder.includes(category)) {
-            menuText += `#${category}\n`;
-            groupedMenu[category].forEach((dish, index) => {
-                menuText += `${index + 1}. ${dish.name}\n`;
+            const grouped = {};
+            sorted.forEach(d => {
+                if (!grouped[d.category]) grouped[d.category] = [];
+                grouped[d.category].push(d);
             });
-            menuText += '\n';
-        }
-    });
-
-    // 使用现代Clipboard API
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(menuText)
-        .then(() => {
-            showNotification('菜单已复制到剪贴板', 'success');
-        })
-        .catch(err => {
-            console.error('复制失败:', err);
-            copyWithFallback(menuText);
-        });
-    } else {
-        copyWithFallback(menuText);
-    }
-}
-
-        
-        // 传统复制方法
-        function copyWithFallback(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            document.body.appendChild(textarea);
-            textarea.select();
-            
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showNotification('菜单已复制到剪贴板', 'success');
-                } else {
-                    throw new Error('execCommand复制失败');
+            let text = "门店菜单\n\n";
+            categoryOrder.forEach(cat => {
+                if (grouped[cat]) {
+                    text += `#${cat}\n`;
+                    grouped[cat].forEach((d,i) => text += `${i+1}. ${d.name}\n`);
+                    text += '\n';
                 }
-            } catch (err) {
-                console.error('传统复制方法失败:', err);
-                showNotification('复制失败，请手动复制文本', 'error');
-            } finally {
-                document.body.removeChild(textarea);
+            });
+            Object.keys(grouped).forEach(cat => {
+                if (!categoryOrder.includes(cat)) {
+                    text += `#${cat}\n`;
+                    grouped[cat].forEach((d,i) => text += `${i+1}. ${d.name}\n`);
+                    text += '\n';
+                }
+            });
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => showNotification('菜单已复制到剪贴板', 'success'))
+                .catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
             }
         }
-        
-        // 导入菜库数据
-        function importDishLibrary(file) {
-            // 显示加载状态
-            const dishList = document.getElementById('dish-list');
-            dishList.innerHTML = '<div class="loading-spinner"></div>';
-            
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    // 验证数据格式
-                    if (!Array.isArray(data)) {
-                        throw new Error('无效的数据格式');
-                    }
-                    
-                    if (data.length > 0) {
-                        // 检查是否有基本结构
-                        const firstItem = data[0];
-                        if (!firstItem.hasOwnProperty('name') || !firstItem.hasOwnProperty('category')) {
-                            throw new Error('数据格式不正确');
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showNotification('菜单已复制到剪贴板', 'success');
+            } catch(e) {
+                showNotification('复制失败，请手动复制', 'error');
+            }
+            document.body.removeChild(ta);
+        }
+
+        // 简单的导入菜库：隐藏文件输入，点击按钮触发选择
+        function importLibrary() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        if (!Array.isArray(data)) throw new Error('格式错误');
+                        if (data.length > 0 && (!data[0].hasOwnProperty('name') || !data[0].hasOwnProperty('category'))) {
+                            throw new Error('数据字段不正确');
                         }
+                        dishLibrary = data;
+                        renderDishLibrary();
+                        saveData();
+                        showNotification(`成功导入 ${data.length} 个菜品`, 'success');
+                    } catch(err) {
+                        showNotification('导入失败：文件格式不正确', 'error');
                     }
-                    
-                    // 替换当前菜库
-                    dishLibrary = data;
-                    renderDishLibrary();
-                    saveData();
-                    
-                    showNotification(`成功导入 ${data.length} 个菜品`, 'success');
-                    
-                    // 关闭模态框
-                    document.getElementById('import-export-modal').style.display = 'none';
-                    document.getElementById('file-name').textContent = '未选择文件';
-                    document.getElementById('file-input').value = '';
-                } catch (error) {
-                    console.error('导入失败:', error);
-                    dishList.innerHTML = '<div class="empty-message">导入失败，请检查文件格式</div>';
-                    showNotification(`导入失败: ${error.message}`, 'error');
-                }
+                };
+                reader.readAsText(file);
             };
-            
-            reader.onerror = function() {
-                dishList.innerHTML = '<div class="empty-message">文件读取失败</div>';
-                showNotification('文件读取失败', 'error');
-            };
-            
-            reader.readAsText(file);
+            input.click();
         }
-        
-        // 导出菜库数据
-        function exportDishLibrary() {
-            // 创建JSON数据
+
+        function exportLibrary() {
             const dataStr = JSON.stringify(dishLibrary, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            // 创建下载链接
-            const exportFileDefaultName = `菜库备份_${new Date().toISOString().slice(0, 10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `菜库备份_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
             showNotification(`成功导出 ${dishLibrary.length} 个菜品`, 'success');
-            
-            // 关闭模态框
-            document.getElementById('import-export-modal').style.display = 'none';
         }
-        
-        // 保存数据
+
         function saveData() {
             localStorage.setItem('myMenu', JSON.stringify(myMenu));
             localStorage.setItem('dishLibrary', JSON.stringify(dishLibrary));
         }
-        
-        // 显示通知
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : 
-                               type === 'warning' ? 'fa-exclamation-triangle' : 
-                               'fa-exclamation-circle'}"></i>
-                ${message}
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // 自动移除通知
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+
+        function showNotification(msg, type='success') {
+            const div = document.createElement('div');
+            div.className = `notification ${type}`;
+            div.innerHTML = `<i class="fas ${type==='success'?'fa-check-circle':type==='warning'?'fa-exclamation-triangle':'fa-exclamation-circle'}"></i>${msg}`;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
         }
-        
-     
-        
-        // 初始化拖拽功能
+
         function initDragAndDrop() {
             const menuList = document.getElementById('menu-list');
-            
-            let draggedItem = null;
-            
-            menuList.addEventListener('dragstart', function(e) {
-                draggedItem = e.target.closest('.dish-row');
-                if (!draggedItem) return;
-                
-                e.dataTransfer.effectAllowed = 'move';
-                draggedItem.classList.add('dragging');
+            let dragged = null;
+            menuList.addEventListener('dragstart', e => {
+                dragged = e.target.closest('.dish-row');
+                if (dragged) {
+                    dragged.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                }
             });
-            
-            menuList.addEventListener('dragover', function(e) {
+            menuList.addEventListener('dragover', e => e.preventDefault());
+            menuList.addEventListener('dragenter', e => {
+                const target = e.target.closest('.dish-row');
+                if (target && target !== dragged) target.classList.add('drag-over');
+            });
+            menuList.addEventListener('dragleave', e => {
+                const target = e.target.closest('.dish-row');
+                if (target) target.classList.remove('drag-over');
+            });
+            menuList.addEventListener('drop', e => {
                 e.preventDefault();
-            });
-            
-            menuList.addEventListener('dragenter', function(e) {
-                const targetItem = e.target.closest('.dish-row');
-                if (!targetItem || targetItem === draggedItem) return;
-                
-                targetItem.classList.add('drag-over');
-            });
-            
-            menuList.addEventListener('dragleave', function(e) {
-                const targetItem = e.target.closest('.dish-row');
-                if (!targetItem || targetItem === draggedItem) return;
-                
-                targetItem.classList.remove('drag-over');
-            });
-            
-            menuList.addEventListener('drop', function(e) {
-                e.preventDefault();
-                const targetItem = e.target.closest('.dish-row');
-                if (!targetItem || !draggedItem || targetItem === draggedItem) return;
-                
-                targetItem.classList.remove('drag-over');
-                
-                // 获取拖拽元素和目标元素的名称
-                const fromName = draggedItem.dataset.name;
-                const toName = targetItem.dataset.name;
-                
-                if (fromName === toName) return;
-                
-                // 重新排序菜单项
-                const fromDishIndex = myMenu.findIndex(d => d.name === fromName);
-                const toDishIndex = myMenu.findIndex(d => d.name === toName);
-                
-                const [movedItem] = myMenu.splice(fromDishIndex, 1);
-                myMenu.splice(toDishIndex, 0, movedItem);
-                
+                const target = e.target.closest('.dish-row');
+                if (!target || !dragged || target === dragged) return;
+                const fromName = dragged.dataset.name;
+                const toName = target.dataset.name;
+                const fromIdx = myMenu.findIndex(d => d.name === fromName);
+                const toIdx = myMenu.findIndex(d => d.name === toName);
+                const [item] = myMenu.splice(fromIdx, 1);
+                myMenu.splice(toIdx, 0, item);
                 renderMenu();
                 saveData();
             });
-            
-            menuList.addEventListener('dragend', function() {
-                if (draggedItem) {
-                    draggedItem.classList.remove('dragging');
-                    draggedItem = null;
-                }
-                
-                document.querySelectorAll('.dish-row.drag-over').forEach(item => {
-                    item.classList.remove('drag-over');
-                });
+            menuList.addEventListener('dragend', () => {
+                if (dragged) dragged.classList.remove('dragging');
+                document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
             });
         }
-        
-        // 初始化事件监听
-        function initEventListeners() {
-            // 分类筛选
+
+        function initEvents() {
             document.querySelectorAll('.filter-tag').forEach(tag => {
                 tag.addEventListener('click', function() {
                     document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    
-                    // 更新当前分类
                     currentCategory = this.dataset.category === 'all' ? 'all' : this.textContent;
-                    
-                    // 应用筛选到菜单和菜库
                     renderMenu();
                     renderDishLibrary();
                 });
             });
-            
-            // 搜索功能
-            document.getElementById('search-input').addEventListener('input', function(e) {
+
+            document.getElementById('search-input').addEventListener('input', e => {
                 currentSearchTerm = e.target.value.trim().toLowerCase();
-                //renderMenu();
                 renderDishLibrary();
             });
-            
-            // 排序按钮
+
             document.getElementById('sort-asc').addEventListener('click', () => sortMenu(true));
             document.getElementById('sort-desc').addEventListener('click', () => sortMenu(false));
-            
-            // 复制菜单按钮
             document.getElementById('copy-menu').addEventListener('click', copyMenu);
-            
-            // 导入菜库按钮
-            document.getElementById('import-library').addEventListener('click', function() {
-                currentModalAction = 'import';
-                document.getElementById('modal-title').textContent = '导入菜库';
-                document.getElementById('action-btn').textContent = '导入';
-                document.getElementById('import-export-modal').style.display = 'flex';
-            });
-            
-            // 导出菜库按钮
-            document.getElementById('export-library').addEventListener('click', function() {
-                currentModalAction = 'export';
-                document.getElementById('modal-title').textContent = '导出菜库';
-                document.getElementById('action-btn').textContent = '导出';
-                document.getElementById('import-export-modal').style.display = 'flex';
-            });
-            
-            // 添加菜品按钮
-            document.getElementById('add-dish').addEventListener('click', function() {
-                // 重置表单和状态
+            document.getElementById('import-library').addEventListener('click', importLibrary);
+            document.getElementById('export-library').addEventListener('click', exportLibrary);
+
+            document.getElementById('add-dish').addEventListener('click', () => {
                 document.getElementById('add-dish-form').reset();
                 document.getElementById('custom-category-container').style.display = 'none';
-                document.querySelectorAll('.error-message').forEach(el => {
-                    el.style.display = 'none';
-                });
-                
-                // 更新模态框标题
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
                 document.getElementById('dish-modal-title').textContent = '添加新菜品';
                 document.getElementById('confirm-add-btn').textContent = '添加菜品';
-                
-                // 重置编辑状态
                 currentEditingDishIndex = null;
-                
-                // 显示模态框
                 document.getElementById('add-dish-modal').style.display = 'flex';
             });
-            
-            // 菜单区域焦点
+
             document.getElementById('menu-section').addEventListener('click', function() {
                 this.classList.add('section-focus');
                 document.getElementById('dish-section').classList.remove('section-focus');
             });
-
-            // 菜库区域焦点
             document.getElementById('dish-section').addEventListener('click', function() {
                 this.classList.add('section-focus');
                 document.getElementById('menu-section').classList.remove('section-focus');
             });
-            
-            // 模态框关闭按钮
-            document.getElementById('close-modal').addEventListener('click', function() {
-                document.getElementById('import-export-modal').style.display = 'none';
-            });
-            
-            document.getElementById('cancel-btn').addEventListener('click', function() {
-                document.getElementById('import-export-modal').style.display = 'none';
-                document.getElementById('file-name').textContent = '未选择文件';
-                document.getElementById('file-input').value = '';
-            });
-            
-            // 执行导入/导出操作按钮
-            document.getElementById('action-btn').addEventListener('click', function() {
-                if (currentModalAction === 'import') {
-                    const fileInput = document.getElementById('file-input');
-                    if (fileInput.files.length === 0) {
-                        showNotification('请选择要导入的JSON文件', 'warning');
-                        return;
-                    }
-                    importDishLibrary(fileInput.files[0]);
-                } else if (currentModalAction === 'export') {
-                    exportDishLibrary();
-                }
-            });
-            
-            // 文件拖放功能
-            const fileDropArea = document.getElementById('file-drop-area');
-            const fileInput = document.getElementById('file-input');
-            
-            // 点击浏览按钮
-            document.querySelector('.browse-btn').addEventListener('click', function() {
-                fileInput.click();
-            });
-            
-            // 文件选择变化
-            fileInput.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    document.getElementById('file-name').textContent = this.files[0].name;
-                }
-            });
-            
-            // 拖放事件
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                fileDropArea.addEventListener(eventName, preventDefaults, false);
-            });
-            
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            
-            ['dragenter', 'dragover'].forEach(eventName => {
-                fileDropArea.addEventListener(eventName, function() {
-                    this.classList.add('active');
-                }, false);
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                fileDropArea.addEventListener(eventName, function() {
-                    this.classList.remove('active');
-                }, false);
-            });
-            
-            fileDropArea.addEventListener('drop', function(e) {
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    const file = files[0];
-                    if (file.type === 'application/json' || file.name.endsWith('.json')) {
-                        document.getElementById('file-name').textContent = file.name;
-                        fileInput.files = files;
-                    } else {
-                        showNotification('请选择JSON格式的文件', 'warning');
-                    }
-                }
-            });
-            
-            // 添加菜品模态框事件
-            document.getElementById('close-add-modal').addEventListener('click', function() {
-                document.getElementById('add-dish-modal').style.display = 'none';
-            });
-            
-            document.getElementById('cancel-add-btn').addEventListener('click', function() {
-                document.getElementById('add-dish-modal').style.display = 'none';
-            });
-            
-            // 分类选择变化
+
+            document.getElementById('close-add-modal').addEventListener('click', () => document.getElementById('add-dish-modal').style.display = 'none');
+            document.getElementById('cancel-add-btn').addEventListener('click', () => document.getElementById('add-dish-modal').style.display = 'none');
+
             document.getElementById('new-dish-category').addEventListener('change', function() {
-                const customCategoryContainer = document.getElementById('custom-category-container');
-                if (this.value === 'other') {
-                    customCategoryContainer.style.display = 'block';
-                } else {
-                    customCategoryContainer.style.display = 'none';
-                }
+                document.getElementById('custom-category-container').style.display = this.value === 'other' ? 'block' : 'none';
             });
-            
-            // 确认添加菜品
-            document.getElementById('confirm-add-btn').addEventListener('click', function() {
-                const nameInput = document.getElementById('new-dish-name');
-                const categorySelect = document.getElementById('new-dish-category');
-                const customCategoryInput = document.getElementById('custom-category');
-                
-                const name = nameInput.value.trim();
-                let category = categorySelect.value;
-                
-                // 验证名称
+
+            document.getElementById('confirm-add-btn').addEventListener('click', () => {
+                const name = document.getElementById('new-dish-name').value.trim();
+                let category = document.getElementById('new-dish-category').value;
                 if (!name) {
                     document.getElementById('name-error').style.display = 'block';
                     return;
-                } else {
-                    document.getElementById('name-error').style.display = 'none';
                 }
-                
-                // 处理自定义分类
                 if (category === 'other') {
-                    category = customCategoryInput.value.trim();
+                    category = document.getElementById('custom-category').value.trim();
                     if (!category) {
                         document.getElementById('custom-category-error').style.display = 'block';
                         return;
-                    } else {
-                        document.getElementById('custom-category-error').style.display = 'none';
                     }
                 }
-                
-                // 创建新菜品
                 if (currentEditingDishIndex !== null) {
-                    // 编辑现有菜品
-                    dishLibrary[currentEditingDishIndex] = {
-                        name: name,
-                        category: category
-                    };
-                    
-                    // 更新菜单中同名菜品
-                    myMenu.forEach(dish => {
-                        if (dish.name === dishLibrary[currentEditingDishIndex].name) {
-                            dish.category = category;
-                        }
-                    });
+                    dishLibrary[currentEditingDishIndex] = { name, category };
+                    myMenu.forEach(d => { if (d.name === dishLibrary[currentEditingDishIndex].name) d.category = category; });
                 } else {
-                    // 添加新菜品
-                    dishLibrary.push({
-                        name: name,
-                        category: category
-                    });
+                    dishLibrary.push({ name, category });
                 }
-                
-                // 保存并更新UI
                 saveData();
                 renderDishLibrary();
                 renderMenu();
-                showNotification('菜品已保存', 'success');
-                
-                // 关闭模态框
                 document.getElementById('add-dish-modal').style.display = 'none';
-                
-                // 重置编辑状态
+                showNotification('菜品已保存', 'success');
                 currentEditingDishIndex = null;
             });
-            
-            // 删除功能事件绑定
+
             document.getElementById('confirm-delete-btn').addEventListener('click', deleteDishFromLibrary);
-            document.getElementById('close-delete-modal').addEventListener('click', function() {
-                document.getElementById('delete-confirm-modal').style.display = 'none';
-            });
-            document.getElementById('cancel-delete-btn').addEventListener('click', function() {
-                document.getElementById('delete-confirm-modal').style.display = 'none';
-            });
+            document.getElementById('close-delete-modal').addEventListener('click', () => document.getElementById('delete-confirm-modal').style.display = 'none');
+            document.getElementById('cancel-delete-btn').addEventListener('click', () => document.getElementById('delete-confirm-modal').style.display = 'none');
         }
-        
-        
-        // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', () => {
             initData();
-            initEventListeners();
+            initEvents();
             initDragAndDrop();
         });
     </script>
