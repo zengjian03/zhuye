@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>餐饮系统 · 快捷导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            padding: 20px 16px 40px 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 移动端舒适容器 + 居中 */
+        .nav-container {
+            max-width: 560px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* 头部简洁区域，继续保留品牌感但不占用太多空间 */
+        .app-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 12px 0 8px;
+        }
+
+        .app-header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #2c3e66, #4a6fa5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .app-header h1 i {
+            background: none;
+            -webkit-background-clip: unset;
+            color: #4a6fa5;
+            font-size: 1.8rem;
+        }
+
+        .app-header .sub {
+            font-size: 0.85rem;
+            color: #5b6e8c;
+            margin-top: 6px;
+            font-weight: 400;
+            border-top: 1px solid #e2e8f0;
+            display: inline-block;
+            padding-top: 6px;
+        }
+
+        /* 导航按钮组 —— 纯粹的大按钮列表，适合手指点按 */
+        .nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* 卡片样式轻量，保留足够点击区域，像大按钮 (符合导航栏要求) */
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            border-radius: 28px;
+            padding: 16px 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            backdrop-filter: blur(0px);
+            cursor: pointer;
+        }
+
+        /* 触摸反馈 */
+        .nav-btn:active {
+            transform: scale(0.97);
+            background-color: #fafcff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 左部：图标 + 文字 */
+        .btn-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex: 1;
+        }
+
+        .btn-icon {
+            width: 52px;
+            height: 52px;
+            background: #f0f4fa;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            transition: background 0.2s;
+            color: #2c3e66;
+        }
+
+        /* 不同模块个性色彩 (柔和区分，保持高级感) */
+        .nav-btn[data-type="kaidan"] .btn-icon { background: #eef2ff; color: #3b5b9b; }
+        .nav-btn[data-type="customer"] .btn-icon { background: #e6f9ee; color: #2b7e3a; }
+        .nav-btn[data-type="staff-menu"] .btn-icon { background: #e0f2fe; color: #0e7c9e; }
+        .nav-btn[data-type="staff-usage"] .btn-icon { background: #fff4e5; color: #c47b2e; }
+        .nav-btn[data-type="menu-mgt"] .btn-icon { background: #fee9e6; color: #c2410c; }
+
+        .btn-text {
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.2px;
+            color: #1e293b;
+        }
+
+        .btn-right {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .nav-btn:hover .btn-right {
+            transform: translateX(4px);
+            color: #4a6fa5;
+        }
+
+        /* 底部简洁版权，清爽不干扰 */
+        .footer-note {
+            text-align: center;
+            margin-top: 48px;
+            font-size: 0.75rem;
+            color: #8ba0bc;
+            padding: 16px 0 8px;
+            border-top: 1px solid #e2edf7;
+            letter-spacing: 0.3px;
+        }
+
+        /* 针对超小屏幕 (<=400px) 微调内边距 */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px 14px 32px 14px;
+            }
+            .nav-btn {
+                padding: 12px 20px;
+            }
+            .btn-icon {
+                width: 46px;
+                height: 46px;
+                font-size: 1.5rem;
+            }
+            .btn-text {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* 保证按钮在任何手机都有舒适点击区 */
+        @media (hover: hover) {
+            .nav-btn:hover {
+                background-color: #fefefe;
+                border-color: #cddfef;
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+            }
+        }
+
+        /* 移除任何原本多余的复杂样式，只保留清晰导航块，完全符合导航栏+按钮需求 */
+    </style>
+</head>
+<body>
+<div class="nav-container">
+    <!-- 极简头部，仅标识系统名称，无多余装饰 -->
+    <div class="app-header">
+        <h1>
+            <i class="fas fa-utensils"></i> 谷子情·餐饮
+        </h1>
+        <div class="sub">快捷导航 | 一键管理</div>
+    </div>
+
+    <!-- 导航按钮组：相当于手机上的核心操作栏，每个按钮跳转对应功能页 -->
+    <div class="nav-list">
+        <!-- 1. 开菜单 -->
+        <a href="https://zengjian03.github.io/zhuye/kaidan.html" class="nav-btn" data-type="kaidan">
+            <div class="btn-left">
+                <div class="btn-icon"><i class="fas fa-clipboard-list"></i></div>
+                <span class="btn-text">开菜单</span>
+            </div>
+            <div class="btn-right"><i class="fas fa-chevron-right"></i></div>
+        </a>
+
+        <!-- 2. 客户餐管理 -->
+        <a href="https://zengjian03.github.io/zhuye/customer_meals.html" class="nav-btn" data-type="customer">
+            <div class="btn-left">
+                <div class="btn-icon"><i class="fas fa-user-friends"></i></div>
+                <span class="btn-text">客户餐</span>
+            </div>
+            <div class="btn-right"><i class="fas fa-chevron-right"></i></div>
+        </a>
+
+        <!-- 3. 员工餐菜单 -->
+        <a href="https://zengjian03.github.io/zhuye/staff_menu.html" class="nav-btn" data-type="staff-menu">
+            <div class="btn-left">
+                <div class="btn-icon"><i class="fas fa-calendar-alt"></i></div>
+                <span class="btn-text">员工餐菜单</span>
+            </div>
+            <div class="btn-right"><i class="fas fa-chevron-right"></i></div>
+        </a>
+
+        <!-- 4. 员工餐用量 -->
+        <a href="https://zengjian03.github.io/zhuye/staff_usage.html" class="nav-btn" data-type="staff-usage">
+            <div class="btn-left">
+                <div class="btn-icon"><i class="fas fa-chart-line"></i></div>
+                <span class="btn-text">员工餐用量</span>
+            </div>
+            <div class="btn-right"><i class="fas fa-chevron-right"></i></div>
+        </a>
+
+        <!-- 5. 菜单管理 (菜品库) -->
+        <a href="https://zengjian03.github.io/zhuye/menu_management.html" class="nav-btn" data-type="menu-mgt">
+            <div class="btn-left">
+                <div class="btn-icon"><i class="fas fa-book-open"></i></div>
+                <span class="btn-text">菜单管理</span>
+            </div>
+            <div class="btn-right"><i class="fas fa-chevron-right"></i></div>
+        </a>
+    </div>
+
+    <div class="footer-note">
+        <i class="fas fa-mobile-alt"></i> 轻触按钮 · 快速切换模块
+    </div>
+</div>
+
+<!-- 无复杂脚本，仅保留优雅导航，轻量且适合手机使用 -->
+</body>
+</html>
