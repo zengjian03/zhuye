@@ -695,7 +695,7 @@
             return;
         }
         navigator.clipboard.writeText(finalText).then(() => {
-            alert('✅ 采购清单已复制，可粘贴至微信/表格');
+            alert('✅ 采购清单已复制，可粘贴至微信');
         }).catch(() => {
             alert('❌ 复制失败，可手动选中文本');
         });
@@ -747,12 +747,12 @@
 
     // 清空所有编辑框内容（只清空右侧采购清单，不清除菜品库）
     function clearAllEditors() {
-        if (confirm('⚠️ 确定清空所有分类的采购单吗？仅清空输入区，菜品库不受影响。')) {
-            for (let editor of Object.values(editors)) {
-                editor.value = '';
-            }
+        if (confirm('⚠️ 确定清空该分类的采购单吗？仅清空输入区，菜品库不受影响。')) {
+
+            const editor = editors[currentCategory];
+            editor.value = '';
             saveToLocalStorage();
-            alert('🧹 所有采购单已清空');
+            alert('🧹 采购单已清空');
         }
     }
 
