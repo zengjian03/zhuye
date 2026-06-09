@@ -686,15 +686,92 @@
                     finalText += `#${cat}\n`;
                 }
                 finalText += content + '\n\n';
-            } else if (content === '') {
-                // 空分类不加任何内容，保持整洁
             }
         }
         if (!finalText) {
-            alert('📋 所有采购单为空，没有可复制的内容');
+            showToast('📋 所有采购单为空，没有可复制的内容');
             return;
         }
-        alert('✅ 采购清单已复制，可粘贴至微信');
+        
+        // 尝试使用现代 clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(finalText).then(() => {
+                showToast('✅ 采购清单已复制，可粘贴至微信');
+            }).catch(() => {
+                // 备用方案：使用传统复制方法
+                fallbackCopy(finalText);
+            });
+        } else {
+            // 不支持 clipboard API，使用备用方案
+            fallbackCopy(finalText);
+        }
+    }
+    
+    // 备用复制方法（兼容各种环境）
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '0';
+        textarea.style.top = '0';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+            const success = document.execCommand('copy');
+            if (success) {
+                showToast('✅ 采购清单已复制，可粘贴至微信');
+            } else {
+                showToast('❌ 复制失败，请手动选中文本复制');
+            }
+        } catch (err) {
+            showToast('❌ 复制失败，请手动选中文本复制');
+        }
+        document.body.removeChild(textarea);
+    }
+    
+    // 显示提示（自动消失，无需确认）
+    function showToast(message) {
+        // 移除已存在的toast
+        const existingToast = document.getElementById('copy-toast');
+        if (existingToast) existingToast.remove();
+        
+        const toast = document.createElement('div');
+        toast.id = 'copy-toast';
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1rem;
+            z-index: 9999;
+            animation: fadeInOut 2s ease;
+        `;
+        
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+                20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            }
+        `;
+        document.head.appendChild(style);
+        document.body.appendChild(toast);
+        
+        // 2秒后自动消失
+        setTimeout(() => {
+            toast.remove();
+            style.remove();
+        }, 2000);
     }
 
     // 导出菜品库 (JSON)
