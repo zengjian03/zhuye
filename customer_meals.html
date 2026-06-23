@@ -641,86 +641,7 @@
                 </button>
             </div>
             
-            <!-- 右侧菜品库区域 -->
-            <div class="panel">
-                <h2><i class="fas fa-book"></i> 菜品库</h2>
-                <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="dish-search" placeholder="搜索菜品...">
-                </div>
-                
-                <div class="category-tabs">
-                    <button class="category-btn active" data-category="all">全部</button>
-                    <button class="category-btn" data-category="大荤">大荤</button>
-                    <button class="category-btn" data-category="蔬菜">蔬菜</button>
-                    <button class="category-btn" data-category="荤菜">荤菜</button>
-                    <button class="category-btn" data-category="素菜">素菜</button>
-                </div>
-                
-                <div class="dishes-grid" id="dishes-grid">
-                    <!-- 菜品卡片将通过JS动态生成 -->
-                </div>
-                
-                <button id="show-add-form" class="btn manage-btn">
-                    <i class="fas fa-plus"></i> 添加新菜品
-                </button>
-                
-                <div class="add-dish-form" id="add-dish-form">
-                    <div class="form-group">
-                        <input type="text" id="new-dish-name" placeholder="输入菜品名称">
-                    </div>
-                    <div class="form-group">
-                        <label>菜品分类</label>
-                        <select id="dish-category">
-                            <option value="大荤">大荤</option>
-                            <option value="蔬菜">蔬菜</option>
-                            <option value="荤菜">荤菜</option>
-                            <option value="素菜">素菜</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>配料信息</label>
-                        <div id="ingredients-container">
-                            <div class="ingredient-row">
-                                <div class="ingredient-name">
-                                    <input type="text" class="ingredient-name-input" placeholder="配料名称">
-                                </div>
-                                <div class="ingredient-amount">
-                                    <input type="number" class="ingredient-amount-input" placeholder="数量">
-                                </div>
-                                <div class="ingredient-unit">
-                                    <select class="ingredient-unit-select">
-                                        <option value="斤">斤</option>
-                                        <option value="包">包</option>
-                                        <option value="个">个</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <button id="add-ingredient" class="btn add-btn add-ingredient-btn">
-                            <i class="fas fa-plus"></i> 添加配料
-                        </button>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button id="add-dish" class="btn add-btn">添加菜品</button>
-                        <button id="cancel-add" class="btn remove-btn">取消</button>
-                    </div>
-                </div>
-                
-                <div class="actions-container">
-                    <div class="file-input-container">
-                        <label for="file-input" class="btn import-btn">
-                            <i class="fas fa-file-import"></i> 导入菜品库
-                        </label>
-                        <input type="file" id="file-input" accept=".json">
-                    </div>
-                    <button id="export-dishes" class="btn export-btn">
-                        <i class="fas fa-file-export"></i> 导出菜品库
-                    </button>
-                </div>
-            </div>
-        </div>
+            
         
         <!-- 份数计算区域 -->
         <div class="panel">
@@ -807,7 +728,86 @@
             </div>
         </div>
     </div>
-    
+    <!-- 右侧菜品库区域 -->
+            <div class="panel">
+                <h2><i class="fas fa-book"></i> 菜品库</h2>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="dish-search" placeholder="搜索菜品...">
+                </div>
+                
+                <div class="category-tabs">
+                    <button class="category-btn active" data-category="all">全部</button>
+                    <button class="category-btn" data-category="大荤">大荤</button>
+                    <button class="category-btn" data-category="蔬菜">蔬菜</button>
+                    <button class="category-btn" data-category="荤菜">荤菜</button>
+                    <button class="category-btn" data-category="素菜">素菜</button>
+                </div>
+                
+                <div class="dishes-grid" id="dishes-grid">
+                    <!-- 菜品卡片将通过JS动态生成 -->
+                </div>
+                
+                <button id="show-add-form" class="btn manage-btn">
+                    <i class="fas fa-plus"></i> 添加新菜品
+                </button>
+                
+                <div class="add-dish-form" id="add-dish-form">
+                    <div class="form-group">
+                        <input type="text" id="new-dish-name" placeholder="输入菜品名称">
+                    </div>
+                    <div class="form-group">
+                        <label>菜品分类</label>
+                        <select id="dish-category">
+                            <option value="大荤">大荤</option>
+                            <option value="蔬菜">蔬菜</option>
+                            <option value="荤菜">荤菜</option>
+                            <option value="素菜">素菜</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>配料信息</label>
+                        <div id="ingredients-container">
+                            <div class="ingredient-row">
+                                <div class="ingredient-name">
+                                    <input type="text" class="ingredient-name-input" placeholder="配料名称">
+                                </div>
+                                <div class="ingredient-amount">
+                                    <input type="number" class="ingredient-amount-input" placeholder="数量">
+                                </div>
+                                <div class="ingredient-unit">
+                                    <select class="ingredient-unit-select">
+                                        <option value="斤">斤</option>
+                                        <option value="包">包</option>
+                                        <option value="个">个</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="add-ingredient" class="btn add-btn add-ingredient-btn">
+                            <i class="fas fa-plus"></i> 添加配料
+                        </button>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button id="add-dish" class="btn add-btn">添加菜品</button>
+                        <button id="cancel-add" class="btn remove-btn">取消</button>
+                    </div>
+                </div>
+                
+                <div class="actions-container">
+                    <div class="file-input-container">
+                        <label for="file-input" class="btn import-btn">
+                            <i class="fas fa-file-import"></i> 导入菜品库
+                        </label>
+                        <input type="file" id="file-input" accept=".json">
+                    </div>
+                    <button id="export-dishes" class="btn export-btn">
+                        <i class="fas fa-file-export"></i> 导出菜品库
+                    </button>
+                </div>
+            </div>
+        </div>
     <!-- 换菜模态框 -->
     <div id="replace-modal" class="modal">
         <div class="modal-content">
