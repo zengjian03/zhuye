@@ -98,7 +98,7 @@
             padding-bottom: 10px;
         }
         
-        /* 左侧菜品列表样式 */
+        /* 左侧菜品列表样式 宽度*/
         .menu-list {
             flex: 0 0 150px;
             background: white;
@@ -188,7 +188,7 @@
         /* 右侧编辑框样式 */
         .editor-section {
             flex: 1;
-            min-width: 280px;
+            min-width: 80px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -206,7 +206,7 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            min-height: 300px;
+            min-height: 600px;
             display: none;
         }
         
@@ -246,7 +246,7 @@
         
         .btn {
             flex: 1;
-            min-width: 100px;
+            min-width: 50px;
             padding: 8px 12px;
             border: none;
             border-radius: var(--border-radius);
@@ -311,7 +311,7 @@
         }
         
         /* 响应式设计 */
-        @media (max-width: 768px) {
+        @media (max-width: 468px) {
             .main-content {
                       flex-direction: row;
                 flex-wrap: nowrap;
@@ -320,11 +320,11 @@
             
             .menu-list,
             .editor-section {
-                min-width: 120px;
-                max-height: calc(100vh - 200px);
+                min-width: 80px;
+                max-height: calc(300vh - 400px);
             }
             .editor-section {
-                min-width: 300px;
+                min-width: 200px;
                 flex: 1;
             }
             .nav-buttons {
